@@ -1,0 +1,69 @@
+🛠️ 1. Lavora in locale
+Apri la cartella vacanza_game sul tuo PC
+
+Fai tutte le modifiche ai tuoi file (app.py, giocatori.json, template/*.html, ecc.)
+
+Salva tutto
+
+💾 2. Salva le modifiche su GitHub
+Nel terminale (Prompt dei comandi o PowerShell), nella tua cartella, dai questi comandi:
+
+bash
+git add .
+git commit -m "Breve descrizione della modifica"  # es: "Aggiunto livello bonus finale"
+git push
+👉 Questo aggiorna il repository online e Render fa il deploy da solo!
+
+
+
+
+🔎 3. Controlla se è online
+Vai su Render Dashboard
+
+Entra nel tuo servizio (COZY_green_game)
+
+Guarda i log in tempo reale (tab “Logs”) per vedere se parte tutto bene
+
+Prova il link pubblico (es: https://cozy-green-app.onrender.com)
+
+
+🧪 Extra Tips (facoltativi)
+🔄 Se non vedi subito le modifiche, prova ad aggiornare la pagina con Ctrl+F5
+
+💥 Se vuoi forzare Render a rifare il deploy: clicca “Manual Deploy” > “Deploy latest commit”
+
+
+🌿 COME AGGIORNARE L'APP COZY_GREEN_GAME 🌿
+
+1. 🔧 MODIFICA I FILE IN LOCALE
+   - Apri la cartella del progetto sul tuo PC: vacanza_game
+   - Fai tutte le modifiche necessarie ai file Python / HTML / JSON / CSS
+   - Salva tutto
+
+2. 💾 SALVA SU GITHUB
+   - Apri il terminale nella cartella del progetto (es: Prompt dei comandi o PowerShell)
+
+   Esegui questi comandi uno dopo l’altro:
+
+       git add .
+       git commit -m "Breve descrizione della modifica"
+       git push
+
+3. 🚀 PUBBLICAZIONE SU RENDER
+   - Non devi fare nulla! Render rileva automaticamente l’aggiornamento su GitHub
+   - Compila nuovamente l'app in 1-2 minuti
+   - Vai su https://dashboard.render.com per monitorare lo stato
+
+4. 🔍 SE NON VEDI LE MODIFICHE
+   - Forza l’aggiornamento nel browser con CTRL+F5
+   - Oppure accedi alla Dashboard di Render → Manual Deploy → Deploy latest commit
+
+5. 🛟 NOTE UTILI
+   - Il file requirements.txt deve contenere gunicorn e le altre librerie usate
+   - Lo Start Command in Render deve essere: gunicorn app:app
+   - Lavora sempre in locale, NON modificare i file direttamente su GitHub
+
+Buon deploy! ✨
+
+
+

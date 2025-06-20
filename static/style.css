@@ -17,3 +17,10 @@
   background-color: var(--verde-primario);
   border-color: var(--verde-primario);
 }
+
+body {
+    background-image: url("/static/img/sfondo_green_game.jpg");
+    background-size: cover;         /* Copre tutta la pagina */
+    background-position: center;    /* Centra l'immagine */
+    background-repeat: no-repeat;   /* Evita ripetizioni */
+}
