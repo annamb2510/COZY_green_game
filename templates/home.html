@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="text-center"><i class="fas fa-user-circle"></i> Hello {{ nickname }}!</h2>
-<p class="text-center">At the moment you have these points <strong>{{ punti }}</strong> 🎯</p>
+<div class="contenitore-home">
+  <h1 class="text-center"><i class="fas fa-user-circle"></i> Hello {{ nickname }}!</h1>
+  <p class="text-center">At the moment you have these points <strong>{{ punti }}</strong> 🎯</p>
 
-<p class="text-center">
-  You are missing <strong>{{ punti_mancanti }}</strong> points to reach the top score: <strong>{{ punteggio_premio }}</strong>! 
-</p>
-
+  <p class="text-center">
+   You are missing <strong>{{ punti_mancanti }}</strong> points to reach the top score: <strong>{{ punteggio_premio }}</strong>! 
+  </p>
 
 <div class="progress rounded-pill mb-3" style="height: 22px;">
   <div class="progress-bar 
@@ -47,3 +47,5 @@
   </a>
 </div>
 {% endblock %}
+</div>
+

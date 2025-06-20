@@ -18,6 +18,16 @@
   border-color: var(--verde-primario);
 }
 
+.contenitore-home {
+  background-color: rgba(255, 255, 255, 0.8); /* bianco trasparente */
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  margin: auto;
+  text-align: center;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+}
+
 body {
     background-image: url("/static/img/sfondo_green_game.jpg");
     background-size: cover;         /* Copre tutta la pagina */
