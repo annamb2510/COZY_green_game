@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center"><i class="fas fa-user-circle"></i> Hello {{ nickname }}!</h2>
+<p class="text-center">At the moment you have these points <strong>{{ punti }}</strong> 🎯</p>
+
+<p class="text-center">
+  You are missing <strong>{{ punti_mancanti }}</strong> points to reach the top score: <strong>{{ punteggio_premio }}</strong>! 
+</p>
+
+
+<div class="progress rounded-pill mb-3" style="height: 22px;">
+  <div class="progress-bar 
+    {% if percentuale >= 100 %}
+      bg-warning text-dark
+    {% elif percentuale >= 80 %}
+      bg-success
+    {% elif percentuale >= 40 %}
+      bg-warning
+    {% else %}
+      bg-danger
+    {% endif %} 
+    progress-bar-striped progress-bar-animated"
+    role="progressbar"
+    style="width: {{ percentuale }}%;"
+    aria-valuenow="{{ percentuale }}" aria-valuemin="0" aria-valuemax="100">
+    <strong>{{ percentuale }}%</strong>
+  </div>
+</div>
+
+{% if percentuale == 100 %}
+  <div class="text-center mt-4 p-4 border rounded shadow-sm bg-light position-relative">
+    <div class="fs-1 mb-3 animate__animated animate__tada">🎉</div>
+    <div class="fs-3 fw-bold text-success mb-2">Premio raggiunto! 🏆</div>
+    <div class="mb-2">You reached <strong>{{ punti }}</strong> points vs. {{ punteggio_premio }}.</div>
+    <div class="display-6">🥇</div>
+  </div>
+{% endif %}
+
+
+<div class="d-flex justify-content-center gap-3 mt-4">
+  <a href="{{ url_for('obiettivi') }}" class="btn btn-outline-success">
+    <i class="fas fa-check-square"></i> Goals
+  </a>
+  <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary">
+    <i class="fas fa-sign-out-alt"></i> Exit
+  </a>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+:root {
+  --verde-primario: #4CAF50;
+  --verde-chiaro: #A5D6A7;
+  --sabbia: #F5F5DC;
+  --marrone-soft: #8D6E63;
+}
+
+.bg-sabbia {
+  background-color: var(--sabbia) !important;
+}
+
+.text-marrone {
+  color: var(--marrone-soft);
+}
+
+.btn-success {
+  background-color: var(--verde-primario);
+  border-color: var(--verde-primario);
+}
