@@ -16,21 +16,21 @@
 </head>
 
 <body class="bg-sabbia text-marrone">
-
-  <div class="container py-4">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="alert alert-info">
-          {% for msg in messages %}
-            {{ msg }}<br>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
-    
+<body>
+  <div class="loading" id="loading">🌱 Loading Green Game...</div>
+  <div class="container py-4" style="display: none;" id="mainContent">
     {% block content %}{% endblock %}
   </div>
-  
+
+  <script>
+    window.addEventListener("load", function() {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    });
+  </script>
 </body>
+
+
+
 </html>
 
