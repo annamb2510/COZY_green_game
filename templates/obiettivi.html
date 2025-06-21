@@ -4,8 +4,8 @@
 <h2 class="text-center mb-4">Choose a goal 🌱</h2>
 
 <form method="post">
-  <div class="container-obiettivi list-group">
-    {% for nome, punti in obiettivi.items() %}
+  <div class="container-obiettivi list-group box-sospesa">
+  {% for nome, punti in obiettivi.items() %}
       <label class="list-group-item d-flex justify-content-between align-items-center
         {% if nome in raggiunti %} bg-light text-muted reached{% endif %}">
 

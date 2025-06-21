@@ -49,6 +49,20 @@ h1, h2, label, button, p {
   font-size: 18px;
 }
 
+.box-sospesa {
+  background: rgba(255, 255, 255, 0.6); /* bianco traslucido */
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.box-sospesa:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.25);
+}
+
 
 .reached {
   color: #7b8b87;   /* inveve di color: #6c757d;*/
