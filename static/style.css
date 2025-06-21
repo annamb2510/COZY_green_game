@@ -31,9 +31,8 @@ h1, h2, label, button, p {
   text-align: center;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
 }
-
 body {
-  background-image: url("/static/img/sfondo_green_game.jpg");
+  background-image: url("/static/img/sfondo_green_game.webp");
   background-size: cover;     /* copre tutta la pagina*/
   background-position: center; /* centra l'immagine */
   background-repeat: no-repeat; /* evita ripetizioni */
