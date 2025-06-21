@@ -19,10 +19,11 @@
         </span>
 
         <span class="badge rounded-pill 
-          {% if nome in raggiunti %} bg-secondary text-light {% else %} bg-success {% endif %}">
+          {% if nome in raggiunti %} bg-success text-light {% else %} bg-secondary text-dark {% endif %}">
           +{{ punti }}
         </span>
-      </label>
+
+             </label>
     {% endfor %}
   </div>
 

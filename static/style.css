@@ -49,9 +49,14 @@ h1, h2, label, button, p {
   font-size: 18px;
 }
 
+
 .reached {
-  color: #6c757d;
-  text-decoration: line-through;
+  color: #7b8b87;   /* inveve di color: #6c757d;*/
+  opacity: 0.85;
+
+  font-style: italic;
+  /* rimuoviamo la barratura se vuoi */
+  text-decoration: none;   /* invece di text-decoration: line-through;*/
 }
 
 
@@ -150,7 +155,7 @@ button:hover {
 }
 
 .baffetto {
-  color: #2e7d32; /* verde scuro elegante */
+  color: #2e7d32 !important; /* verde scuro elegante mantenuto anche se genitore self-muted */
   font-size: 18px;
   margin-right: 6px;
 }
