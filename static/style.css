@@ -38,6 +38,8 @@ h1, h2, label, button, p {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
+background: linear-gradient(to right, #4caf50, #2e7d32);
+
 .contenitore-home {
   background-color: rgba(255, 255, 255, 0.8); /* bianco trasparente */
   padding: 20px;
@@ -56,11 +58,30 @@ body {
   font-family: 'Segoe UI', sans-serif;
   color: #1e392a;
   margin: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.container-obiettivi {
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-top: 20px; /* spazio per evitare il taglio in alto */
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .container-obiettivi {
+    padding-top: env(safe-area-inset-top, 20px);
+  }
+}
+
 
 .box-login {
   background-color: rgba(255, 255, 255, 0.88);

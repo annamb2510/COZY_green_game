@@ -1,0 +1,19 @@
+#installato flask 
+ pip install flask
+
+#lancio Phyton
+python app.py
+
+#tutorial Phyton
+https://docs.python.org/3.10/tutorial/
+
+Apri un browser e vai a: http://localhost:5000 (o l'IP locale della macchina).
+
+
+Puoi stampare il QR code con una frase rassicurante tipo:
+
+> Benvenuto! > Inquadra questo QR code per accedere all’app vacanza. > ⚠️ Se il browser dice “Non sicuro”, è normale: l’app gira solo sulla rete locale e non raccoglie dati personali.
+
+Oppure posso prepararti un mini cartello grafico già pronto da stampare, con logo, istruzioni e QR code integrato. Basta un cenno e lo creo!
+
+Quando vuoi, torniamo anche sul tema HTTPS o su eventuali reti multiple. Intanto… avanti con i prossimi upgrade? 😎📲🌴 Dimmi tu, capitana! 💚🧭
