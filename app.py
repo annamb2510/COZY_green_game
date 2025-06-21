@@ -115,6 +115,8 @@ def obiettivi():
             "ultimo_accesso": datetime.now().isoformat(),
             "obiettivi": []
         }
+    # ✨ questa riga mancava:
+    utente = dati[nickname]
 
     utente.setdefault("obiettivi", [])
     raggiunti = utente["obiettivi"]

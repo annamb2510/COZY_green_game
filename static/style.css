@@ -229,3 +229,9 @@ button:hover {
   color: white;!important
 }
 
+.badge-selezionato {
+  background-color: #81c784; /* verde più chiaro */
+  color: #1e392a;
+  font-weight: 600;
+}
+

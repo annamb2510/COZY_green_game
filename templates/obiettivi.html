@@ -23,10 +23,14 @@
         </span>
 
 
-        <span class="badge rounded-pill 
-          {% if nome in raggiunti %} badge-raggiunto {% else %} badge-attivo {% endif %}">
-          +{{ punti }}
-        </span>
+        {% if nome in raggiunti %}
+           <span class="badge rounded-pill badge-raggiunto">+{{ punti }}</span>
+        {% elif nome == selezionato %}
+           <span class="badge rounded-pill badge-selezionato">+{{ punti }}</span>
+        {% else %}
+           <span class="badge rounded-pill badge-attivo">+{{ punti }}</span>
+        {% endif %}
+
 
              </label>
     {% endfor %}
