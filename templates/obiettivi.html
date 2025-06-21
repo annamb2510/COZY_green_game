@@ -9,26 +9,19 @@
       <label class="list-group-item d-flex justify-content-between align-items-center
         {% if nome in raggiunti %} bg-light text-muted reached{% endif %}">
 
-       
-
-
-       <span class="d-flex align-items-center">
-           {% if nome in raggiunti %}
-              <span class="me-2 text-success">✔️</span>
-           {% endif %}
-
-           <input type="radio" name="obiettivo" value="{{ nome }}"
-           {% if nome in raggiunti %}disabled{% endif %} class="form-check-input me-2">
-           {{ nome }}
-        </span>
         <span class="d-flex align-items-center">
-          <span class="badge rounded-pill 
-            {% if nome in raggiunti %} bg-secondary crossed {% else %} bg-success {% endif %}">
-            +{{ punti }}
-          </span>
-         
+          {% if nome in raggiunti %}
+            <span class="baffetto">✔️</span>
+          {% else %}
+            <input type="radio" name="obiettivo" value="{{ nome }}" class="form-check-input me-2">
+          {% endif %}
+          {{ nome }}
         </span>
 
+        <span class="badge rounded-pill 
+          {% if nome in raggiunti %} bg-secondary text-light {% else %} bg-success {% endif %}">
+          +{{ punti }}
+        </span>
       </label>
     {% endfor %}
   </div>
@@ -40,4 +33,3 @@
 </form>
 
 {% endblock %}
-

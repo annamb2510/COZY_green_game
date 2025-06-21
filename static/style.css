@@ -49,6 +49,12 @@ h1, h2, label, button, p {
   font-size: 18px;
 }
 
+.reached {
+  color: #6c757d;
+  text-decoration: line-through;
+}
+
+
 input[type="radio"]:disabled {
   filter: grayscale(100%) brightness(90%);
   opacity: 0.6;
@@ -143,6 +149,11 @@ button:hover {
   transform: scale(1.05);
 }
 
+.baffetto {
+  color: #2e7d32; /* verde scuro elegante */
+  font-size: 18px;
+  margin-right: 6px;
+}
 
 
 
