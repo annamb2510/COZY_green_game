@@ -94,23 +94,6 @@ def home():
 
     return render_template("home.html", nickname=nickname, punti=giocatore["punti"], punti_mancanti=punti_mancanti, percentuale=percentuale, punteggio_premio=PUNTEGGIO_PREMIO)
 
-def home():
-    if 'nickname' in session:
-        nickname = session['nickname']
-        giocatori = carica_giocatori()
-        giocatore = giocatori.get(nickname, {"punti": 0})
-        
-        punti = giocatore["punti"]
-        punti_mancanti = max(0, PUNTEGGIO_PREMIO - punti)
-        percentuale = min(100, int(punti * 100 / PUNTEGGIO_PREMIO))
-
-        return render_template(
-            "home.html",
-            nickname=nickname,
-            punti=giocatore["punti"], punti_mancanti=punti_mancanti, percentuale=percentuale, punteggio_premio=PUNTEGGIO_PREMIO
-        )
-    else:
-        return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
@@ -133,11 +116,13 @@ def obiettivi():
             "obiettivi": []
         }
 
-    utente = dati[nickname]
-    raggiunti = utente.get("obiettivi", [])
+    utente.setdefault("obiettivi", [])
+    raggiunti = utente["obiettivi"]
+    selezionato = None
 
     if request.method == 'POST':
         selezionato = request.form.get('obiettivo')
+
         if selezionato and selezionato not in raggiunti:
             punti = obiettivi_lista.get(selezionato, 0)
             utente["punti"] += punti
@@ -146,10 +131,13 @@ def obiettivi():
             flash(f"You gained {punti} scores for '{selezionato}'! ✅")
         else:
             flash("Target already marked or invalid.")
-        return redirect('/obiettivi')
 
-
-    return render_template("obiettivi.html", obiettivi=obiettivi_lista, raggiunti=raggiunti)
+    return render_template(
+        "obiettivi.html",
+        obiettivi=obiettivi_lista,
+        raggiunti=utente["obiettivi"],
+        selezionato=selezionato
+    )
 
 if __name__ == '__main__':
 
