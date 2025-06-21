@@ -60,8 +60,6 @@ h2 {
 }
 
 
-
-
 .list-group-item {
   background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(245,255,245,0.2));
   /*background: rgba(255, 255, 255, 0.25);  *//* più trasparente */
@@ -70,8 +68,8 @@ h2 {
   -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
   box-shadow: none;
-  margin-bottom: 4px;         /* prima era 10px */
-  padding: 10px 12px;         /* più compatto */
+  margin-bottom: 2px;         /* prima era 10px */
+  padding: 6px 10px;         /* più compatto */
 }
 
 
@@ -228,7 +226,6 @@ button:hover {
 
 .badge-attivo {
   background-color: #4caf50;
-  color: white;
+  color: white;!important
 }
-
 
