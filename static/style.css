@@ -34,30 +34,44 @@
   border-color: var(--verde-primario);
 }
 
-h1, h2, label, button, p {
+h1,  label, button, p {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
-h1, h2 {
+h1 {
   color: #2e7d32;
   font-weight: 700;
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
   font-size: 2rem;
 }
+
 h2 {
-  background: linear-gradient(to right, #43a047, #66bb6a);
+  font-weight: bold; /*700;*/
+  text-align: center;
+  font-size: 1.9rem;
+  color: #2e7d32;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #43a047, #81c784);  /*background: linear-gradient(to right, #43a047, #66bb6a);*/
   -webkit-background-clip: text;
-  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  /*color: transparent;*/
 }
 
+
+
+
 .list-group-item {
-  position: relative;
-  background: rgba(255, 255, 255, 0.65);
+  background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(245,255,245,0.2));
+  /*background: rgba(255, 255, 255, 0.25);  *//* più trasparente */
   border: none;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  border-radius: 12px;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: none;
+  margin-bottom: 4px;         /* prima era 10px */
+  padding: 10px 12px;         /* più compatto */
 }
 
 
@@ -134,11 +148,16 @@ html, body {
   overflow-x: hidden;
 }
 
+
+
 .container-obiettivi {
   max-height: 100vh;
   overflow-y: auto;
   padding-top: 20px; /* spazio per evitare il taglio in alto */
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 @media (max-width: 768px) {
@@ -197,5 +216,19 @@ button:hover {
   margin-right: 6px;
 }
 
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 0.9rem;
+}
+
+.badge-raggiunto {
+  background-color: #cccccc;
+  color: #1e392a;
+}
+
+.badge-attivo {
+  background-color: #4caf50;
+  color: white;
+}
 
 
