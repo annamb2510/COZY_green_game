@@ -96,9 +96,15 @@ button {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  transition: transform 0.2s ease;
+
 }
 
 button:hover {
   background-color: #2e7d32;
+  transform: scale(1.05);
 }
+
+
+
 
