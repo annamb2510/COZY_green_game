@@ -38,6 +38,23 @@ h1, h2, label, button, p {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
+.list-group-item {
+  position: relative;
+}
+
+.reached input[type="radio"]:checked::before {
+  content: "✔️ ";
+  position: absolute;
+  margin-left: -24px;
+  font-size: 18px;
+}
+
+input[type="radio"]:disabled {
+  filter: grayscale(100%) brightness(90%);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 background: linear-gradient(to right, #4caf50, #2e7d32);
 
 .contenitore-home {
