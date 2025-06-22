@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="text-center"><i class="fas fa-seedling"></i> Start your holiday by playing with us</h2>
+<h2 class="text-center">
+    <i class="fas fa-seedling"></i> Start your holiday by playing with us
+</h2>
 <form method="post" class="mx-auto mt-4" style="max-width: 350px;">
 
  <div class="box-login box-sospesa">
 
-     <h1>Start your holiday playing with us...</h1>
+/*     <h1>Start your holiday playing with us...</h1> */
        <form action="/login" method="POST">
        <label for="nickname">Nickname</label><br>
        <input type="text" id="nickname" name="nickname" required><br>

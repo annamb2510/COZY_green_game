@@ -41,7 +41,7 @@ import sys
 
 def log_debug(msg):
     timestamp = datetime.now().isoformat(timespec='seconds')
-    flash(f"🟢 [COZY-DEBUG] [{timestamp}] {msg}", file=sys.stderr, flush=True)
+    print(f"🟢 [COZY-DEBUG] [{timestamp}] {msg}", file=sys.stderr, flush=True)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
