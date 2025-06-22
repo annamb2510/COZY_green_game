@@ -20,10 +20,6 @@ def carica_dati():
             return json.load(f)
     return {}
 
-def salva_dati(dati):
-    with open(DATA_FILE, 'w') as f:
-        json.dump(dati, f, indent=2)
-
 def carica_config():
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, 'r') as f:
@@ -35,6 +31,10 @@ def carica_obiettivi():
         with open(OBIETTIVI_FILE, 'r') as f:
             return json.load(f)
     return {}
+
+def salva_dati(dati):
+    with open(DATA_FILE, 'w') as f:
+        json.dump(dati, f, indent=2)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -125,11 +125,18 @@ def obiettivi():
     if request.method == 'POST':
         selezionato = request.form.get('obiettivo')
 
+	print(f"[DEBUG] Obiettivo selezionato: {selezionato}")
+	print(f"[DEBUG] Obiettivi già raggiunti: {raggiunti}")
+
         if selezionato and selezionato not in raggiunti:
             punti = obiettivi_lista.get(selezionato, 0)
+            print(f"[DEBUG] Punti assegnati per '{selezionato}': {punti}")
+            print(f"[DEBUG] Punti prima: {utente['punti']}")
             utente["punti"] += punti
+            print(f"[DEBUG] Punti dopo: {utente['punti']}")
             utente["obiettivi"].append(selezionato)
             salva_dati(dati)
+            print(f"[DEBUG] Obiettivi aggiornati: {utente['obiettivi']}")
             flash(f"You gained {punti} scores for '{selezionato}'! ✅")
         else:
             flash("Target already marked or invalid.")
