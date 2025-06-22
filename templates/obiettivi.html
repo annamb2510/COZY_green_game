@@ -1,34 +1,33 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="panel">
   <h1>🎯 My Eco Goals</h1>
 
-  <!-- Riepilogo punteggio -->
-  <p><strong>Total score:</strong> {{ punti }} / {{ punteggio_premio }}  
-  <br><strong>Points to go:</strong> {{ mancano }}</p>
+  <p><strong>Total score:</strong> {{ punti }} / {{ punteggio_premio }}<br>
+     <strong>Points to go:</strong> {{ mancano }}</p>
 
-  <ul style="list-style: none; padding: 0;">
-    {% for ob in obiettivi %}
-      <li style="margin-bottom: 1em;">
-        <form method="post" style="display: flex; align-items: center; justify-content: space-between;">
-          <span>
-            {{ ob.emoji }} {{ ob.testo }}
-          </span>
+  <form method="post">
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      {% for ob in obiettivi %}
+        <li style="display: flex; align-items: center; justify-content: space-between; padding: 0.4em 0; border-bottom: 1px solid #ddd;">
+          <label style="flex: 1; display: flex; align-items: center; gap: 0.6em;">
+            {% if ob.id|string in raggiunti %}
+              <span style="opacity: 0.6;">{{ ob.emoji }} {{ ob.testo }}</span>
+            {% else %}
+              <input type="radio" name="obiettivo" value="{{ ob.id }}">
+              {{ ob.emoji }} {{ ob.testo }}
+            {% endif %}
+          </label>
 
-          {% if ob.id|string in raggiunti %}
-            <span class="badge badge-raggiunto">+{{ ob.punti }}</span>
-          {% else %}
-            <button type="submit" name="obiettivo" value="{{ ob.id }}" class="btn">+{{ ob.punti }}</button>
-          {% endif %}
-        </form>
-      </li>
-    {% endfor %}
-  </ul>
+          <span class="badge badge-raggiunto">+{{ ob.punti }}</span>
+        </li>
+      {% endfor %}
+    </ul>
 
-  {% if selezionato %}
-    <div class="flash-message">✔️ Obiettivo {{ selezionato }} selezionato</div>
-  {% endif %}
+    <div style="text-align: center; margin-top: 1em;">
+      <button type="submit" class="btn">✅ Confirm Selection</button>
+    </div>
+  </form>
 
   <a href="{{ url_for('home') }}" class="btn">← Back to home</a>
 </div>
