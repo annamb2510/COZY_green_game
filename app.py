@@ -10,7 +10,12 @@ GIOCATORI_FILE    = 'giocatori.json'
 CONFIG_FILE       = 'config.json'
 OBIETTIVI_FILE    = 'obiettivi.json'
 PUNTEGGIO_PREMIANTE  = 120
+DATA_FILE = 'giocatori.json'
+CONFIG_FILE = 'config.json'
 
+/*
+config = carica_dati(CONFIG_FILE) or {"riutilizzo_nickname_dopo_giorni": 30}
+*/
 def carica_config():
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, 'r') as f:
@@ -23,9 +28,10 @@ def carica_dati(INPUT_FILE):
             return json.load(f)
     return {}
 
-def salva_dati(dati):
-    with open(DATA_FILE, 'w') as f:
+def salva_dati(dati, output_file):
+    with open(output_file, 'w') as f:
         json.dump(dati, f, indent=2)
+
 
 def log_debug(msg):
     timestamp = datetime.now().isoformat(timespec='seconds')
@@ -63,7 +69,8 @@ def login():
             else:
                 session['nickname'] = nickname
                 dati[nickname]["ultimo_accesso"] = datetime.now().isoformat()
-                salva_dati(dati)
+                salva_dati(dati, DATA_FILE)
+
                 flash("Welcome!")
                 return redirect('/')
 
@@ -73,7 +80,7 @@ def login():
             "ultimo_accesso": datetime.now().isoformat(),
             "obiettivi": []
         }
-        salva_dati(dati)
+        salva_dati(dati, DATA_FILE)
         return redirect('/')
 
     return render_template("login.html")
@@ -134,7 +141,8 @@ def obiettivi():
             utente["punti"] += punti
             log_debug(f"[DEBUG] Punti dopo: {utente['punti']}")
             utente["obiettivi"].append(selezionato)
-            salva_dati(dati)
+            salva_dati(dati, DATA_FILE)
+
             log_debug(f"[DEBUG] Obiettivi aggiornati: {utente['obiettivi']}")
             flash(f"You gained {punti} scores for '{selezionato}'! ✅")
         else:
