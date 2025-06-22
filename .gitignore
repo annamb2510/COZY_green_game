@@ -1,0 +1,29 @@
+# ❌ Ambienti virtuali (Windows, macOS, Linux)
+venv/
+env/
+ENV/
+
+# ❌ File Python compilati
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ❌ Configurazioni editor (VS Code, PyCharm, ecc.)
+.vscode/
+.idea/
+
+# ❌ File temporanei
+*.log
+*.tmp
+*.bak
+.DS_Store
+
+# ❌ Dati locali sensibili
+.env
+instance/
+*.sqlite3
+
+# ❌ Cache Render
+.cache/
+render-build/
+
