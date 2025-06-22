@@ -20,16 +20,15 @@ PUNTEGGIO_PREMIANTE = 120
 
 # 🧠 Funzioni cloud
 def carica_utente(nickname):
-    result = supabase.table("giocatori").select("*").eq("nickname", nickname).single().execute()
+    result = supabase.table("giocatori").select("*").eq("nickname", nickname).execute()
     if result.data:
-        return result.data
+        return result.data[0]
     return {
         "nickname": nickname,
         "punti": 0,
         "ultimo_accesso": datetime.now().isoformat(),
         "obiettivi": []
     }
-
 def salva_utente(nickname, punti, obiettivi):
     ultimo_accesso = datetime.now().isoformat()
     existing = supabase.table("giocatori").select("nickname").eq("nickname", nickname).execute()
