@@ -18,6 +18,10 @@ CONFIG_FILE = 'config.json'
 OBIETTIVI_FILE = 'obiettivi.json'
 PUNTEGGIO_PREMIANTE = 120
 
+@app.route('/sfondo-test')
+def sfondo_test():
+    return render_template('sfondo_test.html')
+
 # 🧠 Funzioni cloud
 def carica_utente(nickname):
     result = supabase.table("giocatori").select("*").eq("nickname", nickname).execute()
