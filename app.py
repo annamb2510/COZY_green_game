@@ -159,6 +159,30 @@ def obiettivi():
         raggiunti=giocatore["obiettivi"],
         selezionato=selezionato
     )
+@app.route('/admin')
+def admin():
+    if session.get('nickname') != 'ADMIN':
+        return redirect('/login')
+
+    try:
+        giocatori = supabase.table("giocatori").select("*").execute().data
+        elenco = []
+        for g in giocatori:
+            punti = g.get("punti", 0)
+            punti_mancanti = max(0, PUNTEGGIO_PREMIANTE - punti)
+            elenco.append({
+                "nickname": g["nickname"],
+                "punti": punti,
+                "mancano": punti_mancanti,
+                "obiettivi": ", ".join(g.get("obiettivi", []))
+            })
+
+        return render_template("admin.html", elenco=elenco)
+
+    except Exception as e:
+        flash(f"Errore Supabase: {e}")
+        return redirect('/')
+
 # 🚀 Avvio
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
