@@ -6,29 +6,31 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="admin">
-    <h1>📋 Lista Giocatori</h1>
+    <div class="panel">
+        <h1>📋 Lista Giocatori</h1>
 
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>Nickname</th>
-                <th>Punti</th>
-                <th>Da Raggiungere</th>
-                <th>Obiettivi Completati</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for g in elenco %}
-            <tr>
-                <td>{{ g.nickname }}</td>
-                <td>{{ g.punti }}</td>
-                <td>{{ g.mancano }}</td>
-                <td>{{ g.obiettivi }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Nickname</th>
+                    <th>Punti</th>
+                    <th>Da Raggiungere</th>
+                    <th>Obiettivi Completati</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for g in elenco %}
+                <tr>
+                    <td>{{ g.nickname }}</td>
+                    <td>{{ g.punti }}</td>
+                    <td>{{ g.mancano }}</td>
+                    <td>{{ g.obiettivi }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a class="btn" href="{{ url_for('logout') }}">Logout</a>
+        <a class="btn" href="{{ url_for('logout') }}">Logout</a>
+    </div>
 </body>
 </html>

