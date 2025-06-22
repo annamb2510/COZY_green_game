@@ -125,8 +125,8 @@ def obiettivi():
     if request.method == 'POST':
         selezionato = request.form.get('obiettivo')
 
-	print(f"[DEBUG] Obiettivo selezionato: {selezionato}")
-	print(f"[DEBUG] Obiettivi già raggiunti: {raggiunti}")
+        print(f"[DEBUG] Obiettivo selezionato: {selezionato}")
+        print(f"[DEBUG] Obiettivi già raggiunti: {raggiunti}")
 
         if selezionato and selezionato not in raggiunti:
             punti = obiettivi_lista.get(selezionato, 0)
