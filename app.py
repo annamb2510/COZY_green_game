@@ -1,24 +1,15 @@
 from flask import Flask, render_template, render_template_string, request, session, redirect, flash, url_for
-import json, os
+import json, os, sys
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'vacanza-secret-key'
 
-DATA_FILE        = 'giocatori.json'
-CONFIG_FILE      = 'config.json'
-OBIETTIVI_FILE   = 'obiettivi.json'
-PUNTEGGIO_PREMIO = 120
-
-def carica_giocatori():
-    with open('giocatori.json', 'r') as f:
-        return json.load(f)
-
-def carica_dati():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'r') as f:
-            return json.load(f)
-    return {}
+INPUT_FILE        = ''
+GIOCATORI_FILE    = 'giocatori.json'
+CONFIG_FILE       = 'config.json'
+OBIETTIVI_FILE    = 'obiettivi.json'
+PUNTEGGIO_PREMIANTE  = 120
 
 def carica_config():
     if os.path.exists(CONFIG_FILE):
@@ -26,22 +17,29 @@ def carica_config():
             return json.load(f)
     return {"riutilizzo_nickname_dopo_giorni": 30}
 
+def carica_dati(INPUT_FILE):
+    if os.path.exists(INPUT_FILE):
+        with open(INPUT_FILE, 'r') as f:
+            return json.load(f)
+    return {}
+/*
+*/
+/*
 def carica_obiettivi():
     if os.path.exists(OBIETTIVI_FILE):
         with open(OBIETTIVI_FILE, 'r') as f:
             return json.load(f)
     return {}
-
+*/
 def salva_dati(dati):
     with open(DATA_FILE, 'w') as f:
         json.dump(dati, f, indent=2)
 
-from datetime import datetime
-import sys
-
 def log_debug(msg):
     timestamp = datetime.now().isoformat(timespec='seconds')
     print(f"🟢 [COZY-DEBUG] [{timestamp}] {msg}", file=sys.stderr, flush=True)
+    flash(f"[DEBUG] [{timestamp}] {msg}")
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -51,8 +49,9 @@ def login():
             flash("Please enter a valid nickname")
             return redirect('/login')
 
-        dati          = carica_dati()
+        dati          = carica_dati(GIOCATORI_FILE)
         config        = carica_config()
+        
         giorni_limite = config.get("riutilizzo_nickname_dopo_giorni", 30)
 
         if nickname in dati:
@@ -93,13 +92,13 @@ def home():
         return redirect(url_for('login'))
 
     nickname = session['nickname']
-    giocatori = carica_giocatori()
+    giocatori = carica_dati(GIOCATORI_FILE)
     giocatore = giocatori.get(nickname, {"punti": 0})
     punti = giocatore["punti"]
-    punti_mancanti = max(0, PUNTEGGIO_PREMIO - punti)
-    percentuale = min(100, int(punti * 100 / PUNTEGGIO_PREMIO))
+    punti_mancanti = max(0, PUNTEGGIO_PREMIANTE - punti)
+    percentuale = min(100, int(punti * 100 / PUNTEGGIO_PREMIANTE))
 
-    return render_template("home.html", nickname=nickname, punti=giocatore["punti"], punti_mancanti=punti_mancanti, percentuale=percentuale, punteggio_premio=PUNTEGGIO_PREMIO)
+    return render_template("home.html", nickname=nickname, punti=giocatore["punti"], punti_mancanti=punti_mancanti, percentuale=percentuale, punteggio_premio=PUNTEGGIO_PREMIANTE)
 
 
 @app.route('/logout')
@@ -112,8 +111,8 @@ def obiettivi():
     if 'nickname' not in session:
         return redirect('/login')
 
-    obiettivi_lista = carica_obiettivi()
-    dati = carica_dati()
+    obiettivi_lista = carica_dati(OBIETTIVI_FILE)
+    dati = carica_dati(GIOCATORI_FILE)
     nickname = session['nickname']
 
     if nickname not in dati:
