@@ -4,7 +4,7 @@ body {
     padding: 2em;
     font-family: 'Segoe UI', 'Font Awesome 5 Free', sans-serif;
     background-color: #eaf5f1;
-    background-image: url("/static/sfondo_green_game.webp");
+    background-image: url("/static/img/sfondo_green_game.webp");
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
