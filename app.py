@@ -14,8 +14,8 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 app = Flask(__name__)
 app.secret_key = 'vacanza-secret-key'
 
-CONFIG_FILE = 'config.json'
-OBIETTIVI_FILE = 'obiettivi.json'
+CONFIG_FILE = 'data/config.json'
+OBIETTIVI_FILE = 'data/obiettivi.json'
 PUNTEGGIO_PREMIANTE = 120
 
 @app.route('/sfondo-test')
@@ -33,6 +33,7 @@ def carica_utente(nickname):
         "ultimo_accesso": datetime.now().isoformat(),
         "obiettivi": []
     }
+
 def salva_utente(nickname, punti, obiettivi):
     ultimo_accesso = datetime.now().isoformat()
     existing = supabase.table("giocatori").select("nickname").eq("nickname", nickname).execute()
@@ -54,7 +55,7 @@ def salva_utente(nickname, punti, obiettivi):
 # 🔧 Supporto
 def carica_dati(file_path, default=None):
     if os.path.exists(file_path):
-        with open(file_path, 'r') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     return default if default is not None else {}
 
@@ -69,10 +70,10 @@ def login():
     if request.method == 'POST':
         nickname = request.form['nickname'].strip().upper()
 
-# Accesso Admin diretto
+        # Accesso Admin diretto
         if nickname.lower() == "admin":
-           session['nickname'] = "ADMIN"
-           return redirect('/admin')
+            session['nickname'] = "ADMIN"
+            return redirect('/admin')
 
         if not nickname:
             flash("Please enter a valid nickname")
@@ -131,12 +132,13 @@ def logout():
     session.pop('nickname', None)
     return redirect('/login')
 
+# 🎯 Obiettivi
 @app.route('/obiettivi', methods=['GET', 'POST'])
 def obiettivi():
     if 'nickname' not in session:
         return redirect('/login')
 
-    obiettivi_lista = carica_dati(OBIETTIVI_FILE)
+    obiettivi_lista = carica_dati(OBIETTIVI_FILE, [])
     nickname = session['nickname']
     giocatore = carica_utente(nickname)
     giocatore.setdefault("obiettivi", [])
@@ -150,16 +152,18 @@ def obiettivi():
         log_debug(f"Obiettivi già raggiunti: {raggiunti}")
 
         if selezionato and selezionato not in raggiunti:
-            punti = obiettivi_lista.get(selezionato, 0)
-            log_debug(f"Punti assegnati: {punti}")
-            log_debug(f"Punti prima: {giocatore['punti']}")
-            giocatore["punti"] += punti
-            giocatore["obiettivi"].append(selezionato)
-            salva_utente(nickname, giocatore["punti"], giocatore["obiettivi"])
+            obiettivo = next((ob for ob in obiettivi_lista if str(ob["id"]) == selezionato), None)
+            if obiettivo:
+                punti = obiettivo.get("punti", 0)
+                giocatore["punti"] += punti
+                giocatore["obiettivi"].append(selezionato)
+                salva_utente(nickname, giocatore["punti"], giocatore["obiettivi"])
 
-            log_debug(f"Punti dopo: {giocatore['punti']}")
-            log_debug(f"Obiettivi aggiornati: {giocatore['obiettivi']}")
-            flash(f"You gained {punti} scores for '{selezionato}'! ✅")
+                log_debug(f"Punti dopo: {giocatore['punti']}")
+                log_debug(f"Obiettivi aggiornati: {giocatore['obiettivi']}")
+                flash(f"You gained {punti} scores for '{obiettivo['testo']}'! ✅")
+            else:
+                flash("Invalid objective selected.")
         else:
             flash("Target already marked or invalid.")
 
@@ -169,6 +173,7 @@ def obiettivi():
         raggiunti=giocatore["obiettivi"],
         selezionato=selezionato
     )
+
 @app.route('/admin')
 def admin():
     if session.get('nickname') != 'ADMIN':

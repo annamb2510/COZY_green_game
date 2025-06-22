@@ -1,0 +1,75 @@
+
+[
+  {
+    "id": 1,
+    "testo": "I turned off the tap while soaping my hands and/or body",
+    "punti": 10,
+    "emoji": "🚿"
+  },
+  {
+    "id": 2,
+    "testo": "I have correctly differentiated the garbage, throwing it in the correct day",
+    "punti": 20,
+    "emoji": "🗑️"
+  },
+  {
+    "id": 3,
+    "testo": "I always closed the lights when I went out or when I did not need them",
+    "punti": 20,
+    "emoji": "💡"
+  },
+  {
+    "id": 4,
+    "testo": "I used the A/C sparingly, avoiding setting a temperature too low compared to that outside (maximum 6°C of difference)",
+    "punti": 30,
+    "emoji": "❄️"
+  },
+  {
+    "id": 5,
+    "testo": "I take public transport and walk a lot to reach the various monuments, looking around to see all the beauties of Rome",
+    "punti": 10,
+    "emoji": "🚶‍♀️"
+  },
+  {
+    "id": 6,
+    "testo": "I charged my device during the day, to avoid repeated night-time recharges",
+    "punti": 10,
+    "emoji": "🔌"
+  },
+  {
+    "id": 7,
+    "testo": "I avoided using plastic bottles and used the glass bottle provided by Cozy apt. filled with tap water",
+    "punti": 10,
+    "emoji": "🍶"
+  },
+  {
+    "id": 8,
+    "testo": "I brought water with me in a reusable bottle",
+    "punti": 10,
+    "emoji": "💧"
+  },
+  {
+    "id": 9,
+    "testo": "I have not wasted the food",
+    "punti": 20,
+    "emoji": "🥗"
+  },
+  {
+    "id": 10,
+    "testo": "I reused towels during my stay without using the available reserve or ask for new towels",
+    "punti": 10,
+    "emoji": "🛁"
+  },
+  {
+    "id": 11,
+    "testo": "I opened the windows to ventilate the room and make it healthier",
+    "punti": 10,
+    "emoji": "🌬️"
+  },
+  {
+    "id": 12,
+    "testo": "I reused the shopping bags made available by Cozy Apt.",
+    "punti": 10,
+    "emoji": "🛍️"
+  }
+]
