@@ -121,7 +121,6 @@ def logout():
     session.pop('nickname', None)
     return redirect('/login')
 
-# 🎯 Obiettivi
 @app.route('/obiettivi', methods=['GET', 'POST'])
 def obiettivi():
     if 'nickname' not in session:
@@ -131,4 +130,36 @@ def obiettivi():
     nickname = session['nickname']
     giocatore = carica_utente(nickname)
     giocatore.setdefault("obiettivi", [])
-    raggiunti = gioc
+    raggiunti = giocatore["obiettivi"]
+    selezionato = None
+
+    if request.method == 'POST':
+        selezionato = request.form.get('obiettivo')
+
+        log_debug(f"Obiettivo selezionato: {selezionato}")
+        log_debug(f"Obiettivi già raggiunti: {raggiunti}")
+
+        if selezionato and selezionato not in raggiunti:
+            punti = obiettivi_lista.get(selezionato, 0)
+            log_debug(f"Punti assegnati: {punti}")
+            log_debug(f"Punti prima: {giocatore['punti']}")
+            giocatore["punti"] += punti
+            giocatore["obiettivi"].append(selezionato)
+            salva_utente(nickname, giocatore["punti"], giocatore["obiettivi"])
+
+            log_debug(f"Punti dopo: {giocatore['punti']}")
+            log_debug(f"Obiettivi aggiornati: {giocatore['obiettivi']}")
+            flash(f"You gained {punti} scores for '{selezionato}'! ✅")
+        else:
+            flash("Target already marked or invalid.")
+
+    return render_template(
+        "obiettivi.html",
+        obiettivi=obiettivi_lista,
+        raggiunti=giocatore["obiettivi"],
+        selezionato=selezionato
+    )
+# 🚀 Avvio
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
