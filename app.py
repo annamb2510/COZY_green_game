@@ -144,8 +144,19 @@ def obiettivi():
     giocatore.setdefault("obiettivi", [])
     raggiunti = giocatore["obiettivi"]
     selezionato = None
-    punti = giocatore["punti"]
+# Calcolo dinamico del punteggio in base agli obiettivi raggiunti (confrontando gli ID)
+
+# Rimane positivo anche se supera il target
+
+   # Calcolo reale del punteggio corrente in base agli obiettivi raggiunti
+    punti = sum(
+       ob["punti"] for ob in obiettivi_lista
+       if str(ob["id"]) in giocatore["obiettivi"]
+    )
+
+# Rimane positivo anche se supera il target
     mancano = max(PUNTEGGIO_PREMIANTE - punti, 0)
+
 
     if request.method == 'POST':
         selezionato = request.form.get('obiettivo')
