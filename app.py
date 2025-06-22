@@ -144,6 +144,8 @@ def obiettivi():
     giocatore.setdefault("obiettivi", [])
     raggiunti = giocatore["obiettivi"]
     selezionato = None
+    punti = giocatore["punti"]
+    mancano = max(PUNTEGGIO_PREMIANTE - punti, 0)
 
     if request.method == 'POST':
         selezionato = request.form.get('obiettivo')
@@ -167,11 +169,19 @@ def obiettivi():
         else:
             flash("Target already marked or invalid.")
 
+  
+
     return render_template(
-        "obiettivi.html",
-        obiettivi=obiettivi_lista,
-        raggiunti=giocatore["obiettivi"],
-        selezionato=selezionato
+      "obiettivi.html",
+      obiettivi=obiettivi_lista,
+      raggiunti=giocatore["obiettivi"],
+      selezionato=selezionato,
+      punti=punti,
+      mancano=mancano,
+      punteggio_premio=PUNTEGGIO_PREMIANTE
+       )
+
+
     )
 
 @app.route('/admin')
