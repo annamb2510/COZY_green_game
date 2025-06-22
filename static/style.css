@@ -274,13 +274,15 @@ table.admin-table {
     margin: 1em auto;
     text-align: center;
     text-decoration: none;
-    color: white;
-    background-color: #4caf50;
+    color: #fff;
+    background-color: #407a57;
     border-radius: 5px;
     font-weight: bold;
+    font-size: 1.1em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-    background-color: #3e8e41;
+    background-color: #305c42;
 }
-
