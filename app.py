@@ -36,6 +36,13 @@ def salva_dati(dati):
     with open(DATA_FILE, 'w') as f:
         json.dump(dati, f, indent=2)
 
+from datetime import datetime
+import sys
+
+def log_debug(msg):
+    timestamp = datetime.now().isoformat(timespec='seconds')
+    flash(f"🟢 [COZY-DEBUG] [{timestamp}] {msg}", file=sys.stderr, flush=True)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -125,18 +132,19 @@ def obiettivi():
     if request.method == 'POST':
         selezionato = request.form.get('obiettivo')
 
-        print(f"[DEBUG] Obiettivo selezionato: {selezionato}")
-        print(f"[DEBUG] Obiettivi già raggiunti: {raggiunti}")
+
+        log_debug(f"[DEBUG] Obiettivo selezionato: {selezionato}")
+        log_debug(f"[DEBUG] Obiettivi già raggiunti: {raggiunti}")
 
         if selezionato and selezionato not in raggiunti:
             punti = obiettivi_lista.get(selezionato, 0)
-            print(f"[DEBUG] Punti assegnati per '{selezionato}': {punti}")
-            print(f"[DEBUG] Punti prima: {utente['punti']}")
+            log_debug(f"[DEBUG] Punti assegnati per '{selezionato}': {punti}")
+            log_debug(f"[DEBUG] Punti prima: {utente['punti']}")
             utente["punti"] += punti
-            print(f"[DEBUG] Punti dopo: {utente['punti']}")
+            log_debug(f"[DEBUG] Punti dopo: {utente['punti']}")
             utente["obiettivi"].append(selezionato)
             salva_dati(dati)
-            print(f"[DEBUG] Obiettivi aggiornati: {utente['obiettivi']}")
+            log_debug(f"[DEBUG] Obiettivi aggiornati: {utente['obiettivi']}")
             flash(f"You gained {punti} scores for '{selezionato}'! ✅")
         else:
             flash("Target already marked or invalid.")
