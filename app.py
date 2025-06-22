@@ -22,15 +22,7 @@ def carica_dati(INPUT_FILE):
         with open(INPUT_FILE, 'r') as f:
             return json.load(f)
     return {}
-/*
-*/
-/*
-def carica_obiettivi():
-    if os.path.exists(OBIETTIVI_FILE):
-        with open(OBIETTIVI_FILE, 'r') as f:
-            return json.load(f)
-    return {}
-*/
+
 def salva_dati(dati):
     with open(DATA_FILE, 'w') as f:
         json.dump(dati, f, indent=2)
