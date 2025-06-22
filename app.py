@@ -182,7 +182,7 @@ def obiettivi():
        )
 
 
-    )
+   
 
 @app.route('/admin')
 def admin():
