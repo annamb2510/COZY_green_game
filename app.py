@@ -12,6 +12,7 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
+app.debug = True
 app.secret_key = 'vacanza-secret-key'
 
 CONFIG_FILE = 'data/config.json'
@@ -150,10 +151,12 @@ def obiettivi():
 
    # Calcolo reale del punteggio corrente in base agli obiettivi raggiunti
     punti = sum(
-       ob["punti"] for ob in obiettivi_lista
-       if str(ob["id"]) in giocatore["obiettivi"]
+       ob.get("punti", 0)
+       for ob in obiettivi_lista
+       if str(ob.get("id")) in giocatore["obiettivi"] 
     )
 
+    
 # Rimane positivo anche se supera il target
     mancano = max(PUNTEGGIO_PREMIANTE - punti, 0)
 
@@ -221,5 +224,6 @@ def admin():
 
 # 🚀 Avvio
 if __name__ == '__main__':
+ 
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
