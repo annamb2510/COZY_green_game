@@ -148,9 +148,9 @@ def logout():
     session.pop('nickname', None)
     return redirect('/login')
 
-# 🎯 Obiettivi
-@app.route('/obiettivi', methods=['GET', 'POST'])
-def obiettivi():
+# 🎯 RObiettivi
+@app.route('/Robiettivi', methods=['GET', 'POST'])
+def Robiettivi():
     if 'nickname' not in session:
         return redirect('/login')
 
