@@ -10,7 +10,7 @@ Nel terminale (Prompt dei comandi o PowerShell), nella tua cartella, dai questi 
 
 bash
 git add .
-git commit -m "Breve descrizione della modifica"  # es: "Aggiunto livello bonus finale"
+git commit -m "sistemato obiettivi"  # es: "Aggiunto livello bonus finale"
 git push
 👉 Questo aggiorna il repository online e Render fa il deploy da solo!
 
@@ -46,7 +46,7 @@ Prova il link pubblico (es: https://cozy-green-app.onrender.com)
    Esegui questi comandi uno dopo l’altro:
 
        git add .
-       git commit -m "Corretta centratura"
+       git commit -m "aggiunta admin"
        git push
 
 3. 🚀 PUBBLICAZIONE SU RENDER
@@ -64,6 +64,14 @@ Prova il link pubblico (es: https://cozy-green-app.onrender.com)
    - Lavora sempre in locale, NON modificare i file direttamente su GitHub
 
 Buon deploy! ✨
+
+cozy_green_game/
+├── app.py
+├── static/
+│   └── style.css
+└── templates/
+    └── admin.html   ✅ qui!
+
 
 
 

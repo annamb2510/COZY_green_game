@@ -3,7 +3,7 @@
 body {
     margin: 0;
     padding: 2em;
-    font-family: 'Segoe UI', 'Font Awesome 5 Free', sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     background-color: #eaf5f1;
     background-image: url("/static/img/sfondo_green_game.webp");
     background-size: cover;
@@ -11,6 +11,14 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     color: #333;
+}
+html {
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: none !important;
+}
+
+body {
+  text-align: left !important;
 }
 
 /* Riquadro centrale galleggiante */

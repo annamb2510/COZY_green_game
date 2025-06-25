@@ -69,6 +69,7 @@ def log_debug(msg):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        log_debug ("Login method post")
         nickname = request.form['nickname'].strip().upper()
 
         # Accesso Admin diretto
@@ -79,6 +80,8 @@ def login():
         if not nickname:
             flash("Please enter a valid nickname")
             return redirect('/login')
+        else:
+            log_debug ("scelto nick name")
 
         giocatore = carica_utente(nickname)
         config = carica_dati(CONFIG_FILE, {"riutilizzo_nickname_dopo_giorni": 30})
@@ -110,14 +113,26 @@ def login():
 # 🏠 Home
 @app.route('/')
 def home():
+    print("[FLASK] ✅ Route / raggiunta")
+    
+
     if 'nickname' not in session:
         return redirect(url_for('login'))
 
     nickname = session['nickname']
     giocatore = carica_utente(nickname)
-    punti = giocatore["punti"]
+    giocatore.setdefault("obiettivi", [])
+
+    obiettivi_lista = carica_dati(OBIETTIVI_FILE, [])
+    punti = sum(
+        ob.get("punti", 0)
+        for ob in obiettivi_lista
+        if str(ob.get("id")) in giocatore["obiettivi"]
+    )
+
     punti_mancanti = max(0, PUNTEGGIO_PREMIANTE - punti)
-    percentuale = min(100, int(punti * 100 / PUNTEGGIO_PREMIANTE))
+    percentuale = min(100, round(punti * 100 / PUNTEGGIO_PREMIANTE))
+    log_debug(f"[HOME] punti={punti}, percentuale={percentuale}")
 
     return render_template("home.html",
         nickname=nickname,
@@ -194,9 +209,6 @@ def obiettivi():
       mancano=mancano,
       punteggio_premio=PUNTEGGIO_PREMIANTE
        )
-
-
-   
 
 @app.route('/admin')
 def admin():
