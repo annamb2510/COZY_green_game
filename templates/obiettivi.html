@@ -5,6 +5,7 @@
 
   <p><strong>Total score:</strong> {{ punti }} / {{ punteggio_premio }}<br>
      <strong>Points to go:</strong> {{ mancano }}</p>
+  <a href="{{ url_for('home') }}" class="btn">← Back to home</a>
 
   <form method="post">
     <div style="text-align: center; margin-top: 1em;">
@@ -38,6 +39,5 @@
 
   </form>
 
-  <a href="{{ url_for('home') }}" class="btn">← Back to home</a>
 </div>
 {% endblock %}

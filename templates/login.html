@@ -6,22 +6,11 @@
 </h2>
 
 <div class="box-login box-sospesa mx-auto mt-4" style="max-width: 350px;">
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul style="list-style: none; padding: 0;">
-        {% for message in messages %}
-          <li style="background-color: #f8f8f8; padding: 0.5em; margin-bottom: 0.5em; border-left: 4px solid #4caf50;">
-            {{ message }}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-
   <form action="/login" method="POST">
     <label for="nickname">Nickname</label><br>
     <input type="text" id="nickname" name="nickname" required style="width: 100%; margin: 0.5em 0;"><br>
     <button type="submit" style="width: 100%;">Enter</button>
   </form>
+
 </div>
 {% endblock %}

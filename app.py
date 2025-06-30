@@ -79,7 +79,8 @@ def login():
         # Accesso Admin diretto
         if nickname.lower() == "admin":
             session['nickname'] = "ADMIN"
-            return redirect('/admin')
+            return redirect('/')
+
 
         if not nickname:
             flash("Please enter a valid nickname")
