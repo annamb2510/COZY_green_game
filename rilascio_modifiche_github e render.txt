@@ -46,7 +46,7 @@ Prova il link pubblico (es: https://cozy-green-app.onrender.com)
    Esegui questi comandi uno dopo l’altro:
 
        git add .
-       git commit -m "aggiunta admin"
+       git commit -m "test malfunzione"
        git push
 
 3. 🚀 PUBBLICAZIONE SU RENDER

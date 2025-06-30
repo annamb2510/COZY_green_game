@@ -12,7 +12,7 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 app.secret_key = 'vacanza-secret-key'
 
 CONFIG_FILE = 'data/config.json'
@@ -60,16 +60,20 @@ def carica_dati(file_path, default=None):
             return json.load(f)
     return default if default is not None else {}
 
+
 def log_debug(msg):
     timestamp = datetime.now().isoformat(timespec='seconds')
     print(f"[DEBUG] [{timestamp}] {msg}", file=sys.stderr, flush=True)
-    flash(f"[DEBUG] [{timestamp}] {msg}")
+    if app.debug:
+        flash(f"[DEBUG] [{timestamp}] {msg}")
+
+
 
 # 🟠 Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        log_debug ("Login method post")
+     #  log_debug ("Login method post")
         nickname = request.form['nickname'].strip().upper()
 
         # Accesso Admin diretto
@@ -80,8 +84,8 @@ def login():
         if not nickname:
             flash("Please enter a valid nickname")
             return redirect('/login')
-        else:
-            log_debug ("scelto nick name")
+        #else:
+          #  log_debug ("scelto nick name")
 
         giocatore = carica_utente(nickname)
         config = carica_dati(CONFIG_FILE, {"riutilizzo_nickname_dopo_giorni": 30})
@@ -113,7 +117,7 @@ def login():
 # 🏠 Home
 @app.route('/')
 def home():
-    print("[FLASK] ✅ Route / raggiunta")
+  #  print("[FLASK] ✅ Route / raggiunta")
     
 
     if 'nickname' not in session:
@@ -132,7 +136,7 @@ def home():
 
     punti_mancanti = max(0, PUNTEGGIO_PREMIANTE - punti)
     percentuale = min(100, round(punti * 100 / PUNTEGGIO_PREMIANTE))
-    log_debug(f"[HOME] punti={punti}, percentuale={percentuale}")
+    #log_debug(f"[HOME] punti={punti}, percentuale={percentuale}")
 
     return render_template("home.html",
         nickname=nickname,
@@ -179,8 +183,8 @@ def Robiettivi():
     if request.method == 'POST':
         selezionato = request.form.get('obiettivo')
 
-        log_debug(f"Obiettivo selezionato: {selezionato}")
-        log_debug(f"Obiettivi già raggiunti: {raggiunti}")
+        #log_debug(f"Obiettivo selezionato: {selezionato}")
+        #log_debug(f"Obiettivi già raggiunti: {raggiunti}")
 
         if selezionato and selezionato not in raggiunti:
             obiettivo = next((ob for ob in obiettivi_lista if str(ob["id"]) == selezionato), None)

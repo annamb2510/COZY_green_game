@@ -2,6 +2,10 @@
 venv/
 env/
 ENV/
+*.pyc
+.env
+
+
 
 # ❌ File Python compilati
 __pycache__/
