@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, flash, url_for
-from datetime import datetime
+from datetime import datetime, timedelta
 import json, os, sys
 
 from dotenv import load_dotenv
@@ -115,15 +115,43 @@ def login():
     return render_template("login.html")
 
 # 🏠 Home
-@app.route('/')
-def home():
-  #  print("[FLASK] ✅ Route / raggiunta")
     
 
+@app.route('/')
+def home():
     if 'nickname' not in session:
         return redirect(url_for('login'))
 
     nickname = session['nickname']
+
+    if nickname == "ADMIN":
+        try:
+            response = supabase.table("giocatori").select("*").neq("nickname", "ADMIN").execute()
+            utenti = response.data
+
+            totale_utenti = len(utenti)
+            media_punti = round(sum(u.get("punti", 0) for u in utenti) / totale_utenti, 2) if totale_utenti else 0
+
+            soglia = PUNTEGGIO_PREMIANTE
+            sette_giorni_fa = datetime.utcnow() - timedelta(days=7)
+            premiati_recenti = [
+                u["nickname"] for u in utenti
+                if u.get("punti", 0) >= soglia and
+                   "ultimo_accesso" in u and
+                   datetime.fromisoformat(u["ultimo_accesso"].replace("Z", "+00:00")) >= sette_giorni_fa
+            ]
+
+            return render_template("home.html",
+                nickname=nickname,
+                totale_utenti=totale_utenti,
+                media_punti=media_punti,
+                premiati_recenti=premiati_recenti
+            )
+        except Exception as e:
+            flash(f"Errore Supabase: {e}")
+            return redirect(url_for('admin'))
+
+    # Utente normale
     giocatore = carica_utente(nickname)
     giocatore.setdefault("obiettivi", [])
 
@@ -136,7 +164,6 @@ def home():
 
     punti_mancanti = max(0, PUNTEGGIO_PREMIANTE - punti)
     percentuale = min(100, round(punti * 100 / PUNTEGGIO_PREMIANTE))
-    #log_debug(f"[HOME] punti={punti}, percentuale={percentuale}")
 
     return render_template("home.html",
         nickname=nickname,
@@ -145,6 +172,7 @@ def home():
         percentuale=percentuale,
         punteggio_premio=PUNTEGGIO_PREMIANTE
     )
+
 
 # 🚪 Logout
 @app.route('/logout')
@@ -232,6 +260,7 @@ def Robiettivi():
 
 @app.route('/admin')
 def admin():
+
     if session.get('nickname') != 'ADMIN':
         return redirect('/login')
 
