@@ -9,9 +9,10 @@
   <form method="post">
     <ul style="list-style: none; padding: 0; margin: 0;">
       {% for ob in obiettivi %}
+        {% set raggiunto = ob.id|string in raggiunti %}
         <li style="display: flex; align-items: center; justify-content: space-between; padding: 0.4em 0; border-bottom: 1px solid #ddd;">
           <label style="flex: 1; display: flex; align-items: center; gap: 0.6em;">
-            {% if ob.id|string in raggiunti %}
+            {% if raggiunto %}
               <span style="opacity: 0.6;">{{ ob.emoji }} {{ ob.testo }}</span>
             {% else %}
               <input type="radio" name="obiettivo" value="{{ ob.id }}">
@@ -19,7 +20,15 @@
             {% endif %}
           </label>
 
-          <span class="badge badge-raggiunto">+{{ ob.punti }}</span>
+          <span class="badge 
+            {% if raggiunto %}
+              bg-success text-white
+            {% else %}
+              bg-warning text-dark
+            {% endif %}
+          ">
+            +{{ ob.punti }}
+          </span>
         </li>
       {% endfor %}
     </ul>
