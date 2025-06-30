@@ -152,6 +152,22 @@ def logout():
     session.pop('nickname', None)
     return redirect('/login')
 
+
+@app.route('/admin/delete_user/<nickname>', methods=['POST'])
+def delete_user(nickname):
+    if session.get("nickname") != "ADMIN":
+        flash("Accesso non autorizzato")
+        return redirect(url_for("home"))
+
+    try:
+        supabase.table("giocatori").delete().eq("nickname", nickname.upper()).execute()
+        flash(f"Utente '{nickname}' eliminato con successo.")
+    except Exception as e:
+        flash(f"Errore durante l'eliminazione: {e}")
+
+    return redirect(url_for("admin"))
+
+
 # 🎯 RObiettivi
 @app.route('/Robiettivi', methods=['GET', 'POST'])
 def Robiettivi():
@@ -231,6 +247,8 @@ def admin():
                 "mancano": punti_mancanti,
                 "obiettivi": ", ".join(g.get("obiettivi", []))
             })
+
+
 
         return render_template("admin.html", elenco=elenco)
 

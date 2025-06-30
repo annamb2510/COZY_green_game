@@ -1,36 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>👑 Admin Panel</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="admin">
-    <div class="panel">
-        <h1>📋 Lista Giocatori</h1>
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">👤 Gestione Utenti</h2>
 
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Nickname</th>
-                    <th>Punti</th>
-                    <th>Da Raggiungere</th>
-                    <th>Obiettivi Completati</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for g in elenco %}
-                <tr>
-                    <td>{{ g.nickname }}</td>
-                    <td>{{ g.punti }}</td>
-                    <td>{{ g.mancano }}</td>
-                    <td>{{ g.obiettivi }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+  {% if elenco %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Nickname</th>
+          <th>Punti</th>
+          <th>Punti mancanti</th>
+          <th>Obiettivi completati</th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for g in elenco %}
+          <tr>
+            <td>{{ g.nickname }}</td>
+            <td>{{ g.punti }}</td>
+            <td>{{ g.mancano }}</td>
+            <td>{{ g.obiettivi }}</td>
+            <td>
+              {% if g.nickname != "ADMIN" %}
+               <form method="post" action="{{ url_for('delete_user', nickname=g.nickname) }}" style="display:inline;">
+                  <button type="submit" class="btn btn-sm btn-danger"
+                          onclick="return confirm('Sei sicuro di voler eliminare {{ g.nickname }}?');">
+                    🗑️ Elimina
+                  </button>
+                </form>
+              {% else %}
+                <span class="text-muted">Protetto</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Nessun utente registrato.</p>
+  {% endif %}
 
-        <a class="btn" href="{{ url_for('logout') }}">Logout</a>
-    </div>
-</body>
-</html>
+  <a href="{{ url_for('home') }}" class="btn btn-outline-primary mt-3">← Torna alla Home</a>
+</div>
+{% endblock %}
