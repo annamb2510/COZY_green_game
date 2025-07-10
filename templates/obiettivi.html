@@ -1,34 +1,47 @@
 {% extends 'base.html' %}
 {% block content %}
   <h2 class="text-center mb-4">🎯 My Eco Goals</h2>
+
   <div class="text-center mb-3">
-    Total score: <strong>{{ punti }}</strong> / {{ punteggio_premio }}  
+    Total score: <strong>{{ punti }}</strong> / {{ punteggio_premio }}
     | Points to go: <strong>{{ mancano }}</strong>
   </div>
+
   <a href="{{ url_for('home') }}" class="btn btn-sm btn-outline-secondary mb-4">
     ← Back
   </a>
 
   <ul class="list-group">
     {% for ob in obiettivi %}
-      {% set id = ob.id %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-          {{ ob.testo }} <span class="badge bg-success">{{ ob.punti }} pt</span>
-        </div>
-        {% if id|string in raggiunti %}
-          <span class="text-success"><i class="fas fa-check-circle"></i></span>
-        {% else %}
+      {% set oid = ob.id|string %}
+      <li class="list-group-item d-flex align-items-center">
+        {# Pulsante a sinistra #}
+        {% if oid not in raggiunti %}
           <form method="post" action="{{ url_for('Robiettivi') }}">
-            <input type="hidden" name="obiettivo" value="{{ id }}">
+            <input type="hidden" name="obiettivo" value="{{ oid }}">
             <button type="submit"
-                    class="btn btn-sm btn-outline-success"
-                    title="Mark goal as done">
+                    class="btn btn-sm btn-warning me-3 animate__animated animate__pulse"
+                    title="Mark goal if done">
               <i class="fas fa-check"></i>
             </button>
           </form>
+        {% else %}
+          <span class="text-success me-3">
+            <i class="fas fa-check-circle fa-lg"></i>
+          </span>
         {% endif %}
+
+        {# Testo e badge punti #}
+        <div class="flex-grow-1">
+          {{ ob.testo }}
+        </div>
+        <span class="badge 
+                    {% if oid not in raggiunti %}bg-warning text-dark{% else %}bg-success{% endif %} 
+                    ms-3">
+          {{ ob.punti }} pt
+        </span>
       </li>
     {% endfor %}
   </ul>
 {% endblock %}
+
