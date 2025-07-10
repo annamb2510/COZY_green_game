@@ -34,7 +34,7 @@ def carica_utente(nickname):
         "ultimo_accesso": datetime.now().isoformat(),
         "obiettivi": []
     }
-
+# alla fine si salva l'utente modificato/creato
 def salva_utente(nickname, punti, obiettivi):
     ultimo_accesso = datetime.now().isoformat()
     existing = supabase.table("giocatori").select("nickname").eq("nickname", nickname).execute()
@@ -60,7 +60,7 @@ def carica_dati(file_path, default=None):
             return json.load(f)
     return default if default is not None else {}
 
-
+# messaggi di debug se attivo
 def log_debug(msg):
     timestamp = datetime.now().isoformat(timespec='seconds')
     print(f"[DEBUG] [{timestamp}] {msg}", file=sys.stderr, flush=True)
@@ -69,7 +69,7 @@ def log_debug(msg):
 
 
 
-# 🟠 Login
+# 🟠 Login con riutilizzo nickname dopo 30 giorni
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -181,7 +181,7 @@ def logout():
     session.pop('nickname', None)
     return redirect('/login')
 
-
+#la cancellazione di un giorcatore può essere fatta solo da ADMIN
 @app.route('/admin/delete_user/<nickname>', methods=['POST'])
 def delete_user(nickname):
     if session.get("nickname") != "ADMIN":
