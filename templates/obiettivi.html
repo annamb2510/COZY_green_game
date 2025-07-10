@@ -1,43 +1,34 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<div class="panel">
-  <h1>🎯 My Eco Goals</h1>
+  <h2 class="text-center mb-4">🎯 My Eco Goals</h2>
+  <div class="text-center mb-3">
+    Total score: <strong>{{ punti }}</strong> / {{ punteggio_premio }}  
+    | Points to go: <strong>{{ mancano }}</strong>
+  </div>
+  <a href="{{ url_for('home') }}" class="btn btn-sm btn-outline-secondary mb-4">
+    ← Back
+  </a>
 
-  <p><strong>Total score:</strong> {{ punti }} / {{ punteggio_premio }}<br>
-     <strong>Points to go:</strong> {{ mancano }}</p>
-  <a href="{{ url_for('home') }}" class="btn">← Back </a>
-
-  <form method="post">
-    <div style="text-align: center; margin-top: 1em;">
-      <button type="submit" class="btn">✅ Confirm Selection</button>
-    </div>
-    <ul style="list-style: none; padding: 0; margin: 0;">
-      {% for ob in obiettivi %}
-        {% set raggiunto = ob.id|string in raggiunti %}
-        <li style="display: flex; align-items: center; justify-content: space-between; padding: 0.4em 0; border-bottom: 1px solid #ddd;">
-          <label style="flex: 1; display: flex; align-items: center; gap: 0.6em;">
-            {% if raggiunto %}
-              <span style="opacity: 0.6;">{{ ob.emoji }} {{ ob.testo }}</span>
-            {% else %}
-              <input type="radio" name="obiettivo" value="{{ ob.id }}">
-              {{ ob.emoji }} {{ ob.testo }}
-            {% endif %}
-          </label>
-
-          <span class="badge 
-            {% if raggiunto %}
-              bg-success text-white
-            {% else %}
-              bg-warning text-dark
-            {% endif %}
-          ">
-            +{{ ob.punti }}
-          </span>
-        </li>
-      {% endfor %}
-    </ul>
-
-  </form>
-
-</div>
+  <ul class="list-group">
+    {% for ob in obiettivi %}
+      {% set id = ob.id %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          {{ ob.testo }} <span class="badge bg-success">{{ ob.punti }} pt</span>
+        </div>
+        {% if id|string in raggiunti %}
+          <span class="text-success"><i class="fas fa-check-circle"></i></span>
+        {% else %}
+          <form method="post" action="{{ url_for('Robiettivi') }}">
+            <input type="hidden" name="obiettivo" value="{{ id }}">
+            <button type="submit"
+                    class="btn btn-sm btn-outline-success"
+                    title="Mark goal as done">
+              <i class="fas fa-check"></i>
+            </button>
+          </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

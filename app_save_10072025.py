@@ -198,37 +198,66 @@ def delete_user(nickname):
 
 
 # 🎯 RObiettivi
-@app.route('/Robiettivi', methods=['GET','POST'])
+@app.route('/Robiettivi', methods=['GET', 'POST'])
 def Robiettivi():
-    nickname = session.get('nickname')
-    if not nickname:
-        return redirect(url_for('login'))
+    if 'nickname' not in session:
+        return redirect('/login')
 
     obiettivi_lista = carica_dati(OBIETTIVI_FILE, [])
+    nickname = session['nickname']
     giocatore = carica_utente(nickname)
-    raggiunti = giocatore.get("obiettivi", [])
+    giocatore.setdefault("obiettivi", [])
+    raggiunti = giocatore["obiettivi"]
+    selezionato = None
+# Calcolo dinamico del punteggio in base agli obiettivi raggiunti (confrontando gli ID)
 
-    if request.method == 'POST':
-        sel = request.form.get('obiettivo')
-        if sel and sel not in raggiunti:
-            ob = next(o for o in obiettivi_lista if str(o['id']) == sel)
-            giocatore['punti'] += ob['punti']
-            raggiunti.append(sel)
-            salva_utente(nickname, giocatore['punti'], raggiunti)
-            flash(f"You gained {ob['punti']} scores for '{ob['testo']}'! ✅")
+# Rimane positivo anche se supera il target
 
-        return redirect(url_for('Robiettivi'))  # <-- qui
+   # Calcolo reale del punteggio corrente in base agli obiettivi raggiunti
+    punti = sum(
+       ob.get("punti", 0)
+       for ob in obiettivi_lista
+       if str(ob.get("id")) in giocatore["obiettivi"] 
+    )
 
-    # GET: ricalcolo
-    punti = sum(o['punti'] for o in obiettivi_lista if str(o['id']) in raggiunti)
+    
+# Rimane positivo anche se supera il target
     mancano = max(PUNTEGGIO_PREMIANTE - punti, 0)
 
-    return render_template('obiettivi.html',
-                           obiettivi=obiettivi_lista,
-                           raggiunti=raggiunti,
-                           punti=punti,
-                           mancano=mancano,
-                           punteggio_premio=PUNTEGGIO_PREMIANTE)
+
+    if request.method == 'POST':
+        selezionato = request.form.get('obiettivo')
+
+        #log_debug(f"Obiettivo selezionato: {selezionato}")
+        #log_debug(f"Obiettivi già raggiunti: {raggiunti}")
+
+        if selezionato and selezionato not in raggiunti:
+            obiettivo = next((ob for ob in obiettivi_lista if str(ob["id"]) == selezionato), None)
+            if obiettivo:
+                punti = obiettivo.get("punti", 0)
+                giocatore["punti"] += punti
+                giocatore["obiettivi"].append(selezionato)
+                salva_utente(nickname, giocatore["punti"], giocatore["obiettivi"])
+
+                log_debug(f"Punti dopo: {giocatore['punti']}")
+                log_debug(f"Obiettivi aggiornati: {giocatore['obiettivi']}")
+                flash(f"You gained {punti} scores for '{obiettivo['testo']}'! ✅")
+            else:
+                flash("Invalid objective selected.")
+        else:
+            flash("Target already marked or invalid.")
+
+  
+
+    return render_template(
+      "obiettivi.html",
+      obiettivi=obiettivi_lista,
+      raggiunti=giocatore["obiettivi"],
+      selezionato=selezionato,
+      punti=punti,
+      mancano=mancano,
+      punteggio_premio=PUNTEGGIO_PREMIANTE
+       )
 
 @app.route('/admin')
 def admin():
