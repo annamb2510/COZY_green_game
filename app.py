@@ -70,12 +70,18 @@ def inject_lang_and_ui():
 #
 # 2) ROUTE PER IL CAMBIO LINGUA
 #
+from flask import request
+
 @app.route('/lang/<locale>')
 def set_language(locale):
     if locale in SUPPORTED_LANGS:
         session['lang'] = locale
-    # torna alla pagina chiamante (o home)
-    return redirect(request.referrer or url_for('home'))
+
+    # recupera la pagina da ricaricare
+    next_page = request.args.get('next')
+    if not next_page:
+        next_page = url_for('home')
+    return redirect(next_page)
 
 
 #

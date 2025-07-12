@@ -47,32 +47,33 @@
 </head>
 
 <body class="bg-sabbia text-marrone">
+
   <div class="loading" id="loading">
     {{ "🌱 Loading Green Game..."|t }}
   </div>
 
   <div class="container py-4" id="mainContent" style="display: none;">
+
     <!-- language selector -->
     <div class="d-flex justify-content-end mb-3">
-      {% set lang = session.get('lang', 'it') %}
-      <a
-        href="{{ url_for('set_language', locale='it') }}"
-        class="btn btn-sm btn-link {% if lang == 'it' %}fw-bold{% endif %}"
-      >{{ "IT"|t }}</a>
-      <a
-        href="{{ url_for('set_language', locale='en') }}"
-        class="btn btn-sm btn-link {% if lang == 'en' %}fw-bold{% endif %}"
-      >{{ "EN"|t }}</a>
-      <a
-        href="{{ url_for('set_language', locale='fr') }}"
-        class="btn btn-sm btn-link {% if lang == 'fr' %}fw-bold{% endif %}"
-      >{{ "FR"|t }}</a>
+      {% set curr = request.path %}
+      {% for code in ['it','en','fr'] %}
+        <a 
+          href="{{ url_for('set_language', locale=code, next=curr) }}"
+          class="btn btn-sm btn-link {% if session.get('lang','it')==code %}fw-bold{% endif %}"
+        >{{ code.upper() }}</a>
+      {% endfor %}
     </div>
 
     {% block content %}{% endblock %}
   </div>
 
-  <!-- attiva il contenuto -->
+<body class="bg-sabbia text-marrone">
+  <div class="loading" id="loading">
+    {{ "🌱 Loading Green Game..."|t }}
+  </div>
+
+<!-- attiva il contenuto -->
   <script>
     window.addEventListener("load", () => {
       document.getElementById("loading").style.display = "none";
