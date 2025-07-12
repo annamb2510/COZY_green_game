@@ -2,12 +2,12 @@
 
 {% block content %}
 <h2 class="text-center">
-    <i class="fas fa-seedling"></i> Start your holiday by playing with us
+    <i class="fas fa-seedling"></i> {{ "Start your holiday by playing with us"|t }}
 </h2>
 
 <div class="box-login box-sospesa mx-auto mt-4" style="max-width: 350px;">
   <form action="/login" method="POST">
-    <label for="nickname">Nickname</label><br>
+    <label for="nickname">{{ "Nickname"|t }}</label><br>
     <input type="text" id="nickname" name="nickname" required style="width: 100%; margin: 0.5em 0;"><br>
     <button type="submit" style="width: 100%;">Enter</button>
   </form>
