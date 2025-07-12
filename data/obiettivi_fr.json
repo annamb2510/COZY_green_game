@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "testo": "J'ai fermé le robinet pendant que je me savonnais les mains et/ou le corps",
+    "punti": 10,
+    "emoji": "🚿"
+  },
+  {
+    "id": 2,
+    "testo": "J'ai trié correctement les déchets, les déposant le jour approprié",
+    "punti": 20,
+    "emoji": "🗑️"
+  },
+  {
+    "id": 3,
+    "testo": "J'ai toujours éteint les lumières en sortant ou quand je n'en avais pas besoin",
+    "punti": 20,
+    "emoji": "💡"
+  },
+  {
+    "id": 4,
+    "testo": "J'ai utilisé la climatisation avec parcimonie, évitant de régler une température trop basse par rapport à l'extérieur (6°C de différence maximum)",
+    "punti": 30,
+    "emoji": "❄️"
+  },
+  {
+    "id": 5,
+    "testo": "J'ai pris les transports en commun et beaucoup marché pour rejoindre les différents monuments, regardant autour de moi pour voir toutes les beautés de Rome",
+    "punti": 10,
+    "emoji": "🚶‍♀️"
+  },
+  {
+    "id": 6,
+    "testo": "J'ai rechargé mon appareil pendant la journée, pour éviter des recharges répétées la nuit",
+    "punti": 10,
+    "emoji": "🔌"
+  },
+  {
+    "id": 7,
+    "testo": "J'ai évité d'utiliser des bouteilles en plastique et j'ai utilisé la bouteille en verre fournie par Cozy Apt., remplie d'eau du robinet",
+    "punti": 10,
+    "emoji": "🍶"
+  },
+  {
+    "id": 8,
+    "testo": "J'ai emporté de l'eau dans une bouteille réutilisable",
+    "punti": 10,
+    "emoji": "💧"
+  },
+  {
+    "id": 9,
+    "testo": "Je n'ai pas gaspillé la nourriture",
+    "punti": 20,
+    "emoji": "🥗"
+  },
+  {
+    "id": 10,
+    "testo": "J'ai réutilisé les serviettes pendant mon séjour sans utiliser les réserves disponibles ni demander de nouvelles serviettes",
+    "punti": 10,
+    "emoji": "🛁"
+  },
+  {
+    "id": 11,
+    "testo": "J'ai ouvert les fenêtres pour ventiler la chambre et la rendre plus saine",
+    "punti": 10,
+    "emoji": "🌬️"
+  },
+  {
+    "id": 12,
+    "testo": "J'ai réutilisé les sacs à provisions mis à disposition par Cozy Apt.",
+    "punti": 10,
+    "emoji": "🛍️"
+  }
+]

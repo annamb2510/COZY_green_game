@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "testo": "Ho chiuso il rubinetto mentre insaponavo le mani e/o il corpo",
+    "punti": 10,
+    "emoji": "🚿"
+  },
+  {
+    "id": 2,
+    "testo": "Ho differenziato correttamente i rifiuti, gettandoli nel giorno corretto",
+    "punti": 20,
+    "emoji": "🗑️"
+  },
+  {
+    "id": 3,
+    "testo": "Ho sempre spento le luci quando uscivo o quando non ne avevo bisogno",
+    "punti": 20,
+    "emoji": "💡"
+  },
+  {
+    "id": 4,
+    "testo": "Ho usato il condizionatore con parsimonia, evitando di impostare una temperatura troppo bassa rispetto all’esterno (massimo 6°C di differenza)",
+    "punti": 30,
+    "emoji": "❄️"
+  },
+  {
+    "id": 5,
+    "testo": "Ho utilizzato i mezzi pubblici e camminato molto per raggiungere i vari monumenti, osservando tutte le bellezze di Roma",
+    "punti": 10,
+    "emoji": "🚶‍♀️"
+  },
+  {
+    "id": 6,
+    "testo": "Ho caricato il mio dispositivo durante il giorno per evitare ricariche ripetute di notte",
+    "punti": 10,
+    "emoji": "🔌"
+  },
+  {
+    "id": 7,
+    "testo": "Ho evitato di usare bottiglie di plastica e ho utilizzato la bottiglia di vetro fornita da Cozy Apt. riempita con acqua del rubinetto",
+    "punti": 10,
+    "emoji": "🍶"
+  },
+  {
+    "id": 8,
+    "testo": "Ho portato con me acqua in una bottiglia riutilizzabile",
+    "punti": 10,
+    "emoji": "💧"
+  },
+  {
+    "id": 9,
+    "testo": "Non ho sprecato il cibo",
+    "punti": 20,
+    "emoji": "🥗"
+  },
+  {
+    "id": 10,
+    "testo": "Ho riutilizzato gli asciugamani durante il soggiorno senza usare quelli di riserva o chiederne di nuovi",
+    "punti": 10,
+    "emoji": "🛁"
+  },
+  {
+    "id": 11,
+    "testo": "Ho aperto le finestre per ventilare la stanza e renderla più salubre",
+    "punti": 10,
+    "emoji": "🌬️"
+  },
+  {
+    "id": 12,
+    "testo": "Ho riutilizzato le borse per la spesa messe a disposizione da Cozy Apt.",
+    "punti": 10,
+    "emoji": "🛍️"
+  }
+]
