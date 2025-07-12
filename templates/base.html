@@ -50,6 +50,9 @@
   <div class="loading" id="loading">
     {{ "🌱 Loading Green Game..."|t }}
   </div>
+  <div class="alert alert-info">
+     session[lang] = {{ session.get('lang')|default('nessuna') }}
+  </div>
 
   <div class="container py-4" id="mainContent" style="display: none;">
     <!-- language selector -->
