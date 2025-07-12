@@ -46,14 +46,18 @@ print("🔤 UI_TRANSLATIONS:", UI_TRANSLATIONS, file=sys.stderr)
 
 @app.template_filter('t')
 def translate_ui(text):
-    """
-    Filtro Jinja: "{{ 'My Eco Goals'|t }}" -> UI_TRANSLATIONS[session_lang].get(text,text)
-    """
     lang = session.get('lang', 'it')
-    print("LOADED UI_TRANSLATIONS:", UI_TRANSLATIONS, file=sys.stderr)
+    translations = UI_TRANSLATIONS.get(lang, {})
+    out = translations.get(text, text)
 
-    return UI_TRANSLATIONS.get(lang, {}).get(text, text)
+    # stampiamo per ogni chiamata:
+    print(
+        f"[t-filter] lang={lang} "
+        f"text={text!r} → out={out!r}",
+        file=sys.stderr
+    )
 
+    return out
 
 
 #
