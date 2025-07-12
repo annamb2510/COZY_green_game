@@ -14,10 +14,8 @@
   "Recently rewarded (last 7 days)": "Premiati ultimi 7 giorni",
   "Your progress": "Votre progression",
   "Points collected:": "Points collectés",
-  "Points to prize:": "Punti al premio:_french",
-  "Completion:": "Completamento:_french",
-  "View Goals": "Vedi Obiettivi_french",
-  "Logout": "Esci"
-}
-
+  "Points to prize:": "Points de récompense:",
+  "Completion:": "Achèvement:",
+  "View Goals": "Voir les objectifs",
+  "Logout": "Sortez"
 }

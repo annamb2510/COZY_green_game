@@ -1,11 +1,16 @@
 {
-  "Green Game": "Green Game",
-  "🌱 Loading Green Game...": "🌱 Loading Green Game...",
-  "My Eco Goals": "My Eco Goals",
-  "Total score:": "Total score:",
-  "Points to go:": "Points to go:",
-  "Back": "Back",
-  "Mark goal as done": "Mark goal as done",
+  "Dashboard": "Dashboard",
+  "Welcome": "Welcome",
+  "Overall stats": "Overall Stats",
+  "Total users:": "Total users:",
+  "Average score:": "Average Score:",
+  "Recently rewarded (last 7 days)": "Premiati ultimi 7 giorni",
+  "Your progress": "Your progress",
+  "Points collected:": "Points collected:",
+  "Points to prize:": "Points to prize:",
+  "Completion:": "Completion:",
+  "View Goals": "View Goals:",
+  "Logout": "Logout",
    "Green Game": "Green Game",
   "🌱 Loading Green Game...": "🌱 Loading Green Game...",
   "My Eco Goals": "My Eco Goals",
@@ -13,5 +18,4 @@
   "Points to go:": "Points to go:",
   "Back": "Back",
   "Mark goal as done": "Mark goal as done"
-
 }
