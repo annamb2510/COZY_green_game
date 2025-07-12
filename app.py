@@ -47,7 +47,10 @@ def translate_ui(text):
     Filtro Jinja: "{{ 'My Eco Goals'|t }}" -> UI_TRANSLATIONS[session_lang].get(text,text)
     """
     lang = session.get('lang', 'it')
+    print("LOADED UI_TRANSLATIONS:", UI_TRANSLATIONS, file=sys.stderr)
+
     return UI_TRANSLATIONS.get(lang, {}).get(text, text)
+
 
 
 #
