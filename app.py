@@ -27,6 +27,7 @@ SUPPORTED_LANGS = ['it', 'en', 'fr']
 #
 # 1) CARICAMENTO TRADUZIONI UI (strings_xx.json)
 #
+
 def load_ui_translations():
     base = os.path.join(app.root_path, 'translations')
     out = {}
@@ -40,6 +41,8 @@ def load_ui_translations():
     return out
 
 UI_TRANSLATIONS = load_ui_translations()
+import sys
+print("🔤 UI_TRANSLATIONS:", UI_TRANSLATIONS, file=sys.stderr)
 
 @app.template_filter('t')
 def translate_ui(text):
@@ -221,6 +224,7 @@ def Robiettivi():
 
     lang = session.get('lang', 'it')
     obiettivi_lista = load_goals(lang)
+
     giocatore = carica_utente(nickname)
     raggiunti = giocatore.get("obiettivi", [])
 
