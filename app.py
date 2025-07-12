@@ -59,6 +59,13 @@ def translate_ui(text):
 
     return out
 
+@app.context_processor
+def inject_lang_and_ui():
+    return {
+      'lang': session.get('lang','it'),
+      # se vuoi accedere a UI_TRANSLATIONS direttamente in template
+      'UI_TRANSLATIONS': UI_TRANSLATIONS
+    }
 
 #
 # 2) ROUTE PER IL CAMBIO LINGUA

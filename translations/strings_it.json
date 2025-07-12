@@ -1,4 +1,17 @@
 {
+  …,
+  "Dashboard": "Cruscotto",
+  "Welcome": "Benvenuto",
+  "Overall stats": "Statistiche generali",
+  "Total users:": "Utenti totali:",
+  "Average score:": "Punteggio medio:",
+  "Recently rewarded (last 7 days)": "Premiati ultimi 7 giorni",
+  "Your progress": "Il tuo avanzamento",
+  "Points collected:": "Punti raccolti:",
+  "Points to prize:": "Punti al premio:",
+  "Completion:": "Completamento:",
+  "View Goals": "Vedi Obiettivi",
+  "Logout": "Esci",
   "Green Game": "Green Game",
   "🌱 Loading Green Game...": "🌱 Caricamento Green Game...",
   "My Eco Goals": "I miei Obiettivi Eco",
@@ -7,3 +20,4 @@
   "Back": "Indietro",
   "Mark goal as done": "Segna obiettivo come completato"
 }
+

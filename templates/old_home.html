@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="panel">
+  <h1 class="mb-4">🏠 {{ "Dashboard"|t }}</h1>
+
+  <p>
+    {{ "Welcome"|t }}, <strong>{{ nickname }}</strong>!
+  </p>
+
+  {% if nickname == "ADMIN" %}
+    <h2>{{ "Overall stats"|t }}</h2>
+    <p>
+      {{ "Total users:"|t }} {{ totale_utenti }}<br>
+      {{ "Average score:"|t }} {{ media_punti }}
+    </p>
+    <h3>{{ "Recently rewarded (last 7 days)"|t }}</h3>
+    <ul>
+      {% for n in premiati_recenti %}
+        <li>{{ n }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <h2>{{ "Your progress"|t }}</h2>
+    <p>
+      {{ "Points collected:"|t }} <strong>{{ punti }}</strong><br>
+      {{ "Points to prize:"|t }} <strong>{{ punti_mancanti }}</strong><br>
+      {{ "Completion:"|t }} <strong>{{ percentuale }}%</strong>
+    </p>
+    <a href="{{ url_for('Robiettivi') }}" class="btn btn-primary">
+      {{ "View Goals"|t }}
+    </a>
+  {% endif %}
+
+  <div class="mt-4">
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">
+      {{ "Logout"|t }}
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="contenitore-home">
+  <h1 class="text-center">
+    <i class="fas fa-user-circle"></i>
+    Hello {{ nickname | default('🌱') }}!
+  </h1>
+
+  {% if nickname != "ADMIN" %}
+    <p class="text-center">
+      At the moment you have these points <strong>{{ punti | default(0) }}</strong> 🎯
+    </p>
+
+    <p class="text-center">
+      You are missing <strong>{{ punti_mancanti | default('...') }}</strong> points to reach the top score: <strong>{{ punteggio_premio | default(120) }}</strong>!
+    </p>
+
+    {% set p = percentuale | default(0) %}
+    <div class="progress rounded-pill mb-3" style="height: 22px;">
+      <div class="progress-bar 
+        {% if p >= 100 %}
+          bg-warning text-dark
+        {% elif p >= 80 %}
+          bg-success
+        {% elif p >= 40 %}
+          bg-warning
+        {% else %}
+          bg-danger
+        {% endif %}
+        progress-bar-striped progress-bar-animated"
+        role="progressbar"
+        style="width: {{ p }}%;"
+        aria-valuenow="{{ p }}" aria-valuemin="0" aria-valuemax="100">
+        <strong>{{ p }}%</strong>
+      </div>
+    </div>
+
+    {% if p >= 100 %}
+      <div class="text-center mt-4 p-4 border rounded shadow-sm bg-light position-relative">
+        <div class="fs-1 mb-3 animate__animated animate__tada">🎉</div>
+        <div class="fs-3 fw-bold text-success mb-2">Premio raggiunto! 🏆</div>
+        <div class="mb-2">You reached <strong>{{ punti | default(0) }}</strong> points vs. {{ punteggio_premio | default(120) }}.</div>
+        <div class="display-6">🥇</div>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="text-center mt-4">
+      <p class="fs-4">Welcome back, ADMIN 👑</p>
+      <p>You can manage players from the <a href="{{ url_for('admin') }}">Admin Panel</a>.</p>
+    </div>
+
+    <div class="mt-5 p-4 border rounded bg-light shadow-sm">
+      <h4 class="mb-3">📊 Player Summary</h4>
+      <ul class="list-unstyled">
+        <li><strong>Total players:</strong> {{ totale_utenti }}</li>
+        <li><strong>Average score:</strong> {{ media_punti }}</li>
+        <li><strong>🏆 Reached prize in last 7 days:</strong>
+          {% if premiati_recenti %}
+            {{ premiati_recenti | join(', ') }}
+          {% else %}
+            <em>None</em>
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+  {% endif %}
+
+  <div class="d-flex justify-content-center gap-3 mt-4">
+    {% if nickname != "ADMIN" %}
+      <a href="{{ url_for('Robiettivi') }}" class="btn btn-outline-success">
+        <i class="fas fa-check-square"></i> Goals
+      </a>
+    {% endif %}
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary">
+      <i class="fas fa-sign-out-alt"></i> Exit
+    </a>
+  </div>
+</div>
+{% endblock %}
