@@ -72,15 +72,17 @@ def inject_lang_and_ui():
 #
 from flask import request
 
+
 @app.route('/lang/<locale>')
 def set_language(locale):
     if locale in SUPPORTED_LANGS:
         session['lang'] = locale
+        # forza salvataggio sessione prima di redirect
+        session.modified = True
 
-    # recupera la pagina da ricaricare
     next_page = request.args.get('next')
     if not next_page:
-        next_page = url_for('home')
+        next_page = url_for('login')
     return redirect(next_page)
 
 
