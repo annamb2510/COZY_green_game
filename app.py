@@ -72,19 +72,13 @@ def inject_lang_and_ui():
 #
 from flask import request
 
-
-@app.route('/lang/<locale>')
+@app.route('/lang/<locale>', methods=['POST'])
 def set_language(locale):
     if locale in SUPPORTED_LANGS:
         session['lang'] = locale
-        # forza salvataggio sessione prima di redirect
         session.modified = True
-
-    next_page = request.args.get('next')
-    if not next_page:
-        next_page = url_for('login')
+    next_page = request.form.get('next') or url_for('login')
     return redirect(next_page)
-
 
 #
 # 3) CARICAMENTO OBIETTIVI PER LINGUA
