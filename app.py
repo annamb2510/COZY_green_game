@@ -73,12 +73,33 @@ def inject_lang_and_ui():
 from flask import request
 
 @app.route('/lang/<locale>', methods=['POST'])
+@app.route('/lang/<locale>', methods=['POST'])
 def set_language(locale):
     if locale in SUPPORTED_LANGS:
         session['lang'] = locale
         session.modified = True
+
     next_page = request.form.get('next') or url_for('login')
-    return redirect(next_page)
+    return f"""
+    <!DOCTYPE html>
+    <html lang="{locale}">
+    <head>
+      <meta charset="utf-8" />
+      <title>Switching language…</title>
+      <script>
+        setTimeout(function() {{
+          window.location.href = '{next_page}';
+        }}, 100);
+      </script>
+    </head>
+    <body>
+      <p style="text-align: center; padding-top: 2rem;">
+        🌍 Switching to language: <strong>{locale.upper()}</strong><br>
+        Just a moment…
+      </p>
+    </body>
+    </html>
+    """
 
 #
 # 3) CARICAMENTO OBIETTIVI PER LINGUA
