@@ -33,6 +33,62 @@ def inject_lang():
 @app.route("/_debug/routes")
 def debug_routes():
     return "<br>".join(str(r) for r in app.url_map.iter_rules())
+from flask import render_template, request, redirect, url_for, flash
+
+# login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        nickname = request.form.get('nickname', '').strip().upper()
+        if not nickname:
+            flash(T("Please enter a valid nickname"))
+            return redirect('/login')
+        session['nickname'] = nickname
+        flash("Welcome!")
+        return redirect('/')
+    return render_template("login.html")
+
+# home
+@app.route('/')
+def home():
+    nickname = session.get('nickname')
+    if not nickname:
+        return redirect('/login')
+    return render_template("home.html", nickname=nickname)
+
+# cambio lingua
+@app.route('/lang/<locale>', methods=['POST'])
+def set_language(locale):
+    if locale in SUPPORTED_LANGS:
+        session['lang'] = locale
+        session.modified = True
+    next_page = request.form.get('next') or url_for('login')
+    return f"""
+    <!DOCTYPE html>
+    <html lang="{locale}">
+    <head>
+      <meta charset="utf-8" />
+      <title>Switching language…</title>
+      <script>
+        setTimeout(function() {{
+          window.location.href = '{next_page}';
+        }}, 100);
+      </script>
+    </head>
+    <body>
+      <p style="text-align: center; padding-top: 2rem;">
+        🌍 Switching to language: <strong>{locale.upper()}</strong><br>
+        Just a moment…
+      </p>
+    </body>
+    </html>
+    """
+
+# logout
+@app.route('/logout')
+def logout():
+    session.pop('nickname', None)
+    return redirect('/login')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
