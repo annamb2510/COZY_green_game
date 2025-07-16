@@ -10,17 +10,17 @@ from flask import (
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
-# 🔧 Init Supabase
+# 🔐 Supabase connection
 load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# 🧠 Init Flask
+# ⚙️ Flask setup
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'vacanza-secret-key')
 
-# 🌍 Carica traduzioni UI
+# 🌍 UI Translations
 SUPPORTED_LANGS = ['it', 'en', 'fr']
 UI_TRANSLATIONS = {}
 translations_dir = Path(__file__).parent / 'translations'
@@ -35,11 +35,11 @@ for file in translations_dir.glob('strings_*.json'):
         app.logger.error(f"Errore caricando {file.name}: {e}")
         UI_TRANSLATIONS[lang] = {}
 
-# 🔣 Helper traduzioni
+# 🔣 Global T() helper
 app.jinja_env.globals['T'] = lambda text: \
     UI_TRANSLATIONS.get(session.get('lang', 'it'), {}).get(text, text)
 
-# 💬 Inietta lingua e traduzioni nei template
+# 📥 Inject lang + translations in templates
 @app.context_processor
 def inject_lang():
     return {
@@ -47,26 +47,31 @@ def inject_lang():
         'UI_TRANSLATIONS': UI_TRANSLATIONS
     }
 
-# 🛠 Rotta debug per tutte le route
+# 🛠 Debug route to inspect active endpoints
 @app.route("/_debug/routes")
 def debug_routes():
     return "<br>".join(str(r) for r in app.url_map.iter_rules())
 
-# 📁 Carica obiettivi localizzati
+# 🟢 Load goals from local JSON
 def load_goals(lang):
     fn = Path(__file__).parent / 'data' / f'obiettivi_{lang}.json'
     if fn.exists():
         return json.loads(fn.read_text(encoding='utf-8'))
     return []
 
-# 🧑‍💻 Carica utente da Supabase
+# 🧍‍♂️ User loader from Supabase
 def carica_utente(nickname):
     result = supabase.table("giocatori").select("*").eq("nickname", nickname).execute()
     if result.data:
         return result.data[0]
-    return {"nickname": nickname, "punti": 0, "obiettivi": [], "ultimo_accesso": datetime.now().isoformat()}
+    return {
+        "nickname": nickname,
+        "punti": 0,
+        "obiettivi": [],
+        "ultimo_accesso": datetime.now().isoformat()
+    }
 
-# 💾 Salva utente su Supabase
+# 💾 Save user progress to Supabase
 def salva_utente(nickname, punti, obiettivi):
     ultimo_accesso = datetime.now().isoformat()
     exists = supabase.table("giocatori").select("nickname").eq("nickname", nickname).execute()
@@ -84,7 +89,7 @@ def salva_utente(nickname, punti, obiettivi):
             "ultimo_accesso": ultimo_accesso
         }).execute()
 
-# 🔐 Login
+# 🔐 LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -97,7 +102,7 @@ def login():
         return redirect('/')
     return render_template("login.html")
 
-# 🏠 Home e dashboard
+# 🏠 HOME
 @app.route('/')
 def home():
     nickname = session.get('nickname')
@@ -113,8 +118,10 @@ def home():
         media_punti = round(sum(punti_list) / len(punti_list), 2) if punti_list else 0
 
         sette_giorni_fa = (datetime.now() - timedelta(days=7)).isoformat()
-        recenti = supabase.table("giocatori").select("nickname", "ultimo_accesso")\
-                          .gte("ultimo_accesso", sette_giorni_fa).execute()
+        recenti = supabase.table("giocatori")\
+                          .select("nickname", "ultimo_accesso")\
+                          .gte("ultimo_accesso", sette_giorni_fa)\
+                          .execute()
         premiati_recenti = [r["nickname"] for r in recenti.data if "nickname" in r]
 
         return render_template("home.html",
@@ -123,10 +130,12 @@ def home():
             media_punti=media_punti,
             premiati_recenti=premiati_recenti
         )
+
     else:
         giocatore = carica_utente(nickname)
         obiettivi = load_goals(session.get('lang', 'it'))
-        punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in giocatore["obiettivi"])
+        raggiunti = set(giocatore.get("obiettivi", []))
+        punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in raggiunti)
         punteggio_premio = 120
         punti_mancanti = max(0, punteggio_premio - punti)
         percentuale = round(punti * 100 / punteggio_premio)
@@ -139,7 +148,7 @@ def home():
             punteggio_premio=punteggio_premio
         )
 
-# 🌐 Cambio lingua
+# 🌐 LANG SWITCH
 @app.route('/lang/<locale>', methods=['POST'])
 def set_language(locale):
     if locale in SUPPORTED_LANGS:
@@ -167,13 +176,13 @@ def set_language(locale):
     </html>
     """
 
-# 🔓 Logout
+# 🔓 LOGOUT
 @app.route('/logout')
 def logout():
     session.pop('nickname', None)
     return redirect('/login')
 
-# 🎯 Obiettivi
+# 🎯 OBIETTIVI
 @app.route('/Robiettivi', methods=['GET', 'POST'])
 def Robiettivi():
     nickname = session.get('nickname')
@@ -181,14 +190,16 @@ def Robiettivi():
         return redirect('/login')
     giocatore = carica_utente(nickname)
     obiettivi = load_goals(session.get('lang', 'it'))
-
     raggiunti = set(giocatore.get("obiettivi", []))
+
     if request.method == 'POST':
         oid = request.form.get("obiettivo")
         if oid and oid not in raggiunti:
             raggiunti.add(oid)
             punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in raggiunti)
             salva_utente(nickname, punti, list(raggiunti))
+            lang = session.get('lang', 'it')
+            T = lambda text: UI_TRANSLATIONS.get(lang, {}).get(text, text)
             flash(T("Goal marked as completed"))
 
     punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in raggiunti)
@@ -203,7 +214,7 @@ def Robiettivi():
         raggiunti=raggiunti
     )
 
-# 🚀 Avvio app locale
+# 🚀 App launcher (for local dev)
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
