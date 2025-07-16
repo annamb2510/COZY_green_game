@@ -1,0 +1,3 @@
+{% macro _(text) -%}
+  {{ UI_TRANSLATIONS[lang].get(text, text) }}
+{%- endmacro %}
