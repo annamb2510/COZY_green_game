@@ -54,14 +54,99 @@ def login():
         flash("Welcome!")
         return redirect('/')
     return render_template("login.html")
+from datetime import datetime
+
+# 1. Carica utente da Supabase
+def carica_utente(nickname):
+    result = supabase.table("giocatori")\
+                     .select("*")\
+                     .eq("nickname", nickname)\
+                     .execute()
+    if result.data:
+        return result.data[0]
+    return {
+        "nickname": nickname,
+        "punti": 0,
+        "obiettivi": [],
+        "ultimo_accesso": datetime.now().isoformat()
+    }
+
+# 2. Salva utente su Supabase
+def salva_utente(nickname, punti, obiettivi):
+    ultimo_accesso = datetime.now().isoformat()
+    esiste = supabase.table("giocatori")\
+                     .select("nickname")\
+                     .eq("nickname", nickname)\
+                     .execute()
+    if esiste.data:
+        supabase.table("giocatori").update({
+            "punti": punti,
+            "obiettivi": obiettivi,
+            "ultimo_accesso": ultimo_accesso
+        }).eq("nickname", nickname).execute()
+    else:
+        supabase.table("giocatori").insert({
+            "nickname": nickname,
+            "punti": punti,
+            "obiettivi": obiettivi,
+            "ultimo_accesso": ultimo_accesso
+        }).execute()
+
+# 3. Carica obiettivi per lingua
+def load_goals(lang):
+    fn = Path(__file__).parent / 'data' / f'obiettivi_{lang}.json'
+    if fn.exists():
+        return json.loads(fn.read_text(encoding='utf-8'))
+    return []
 
 # 6️⃣ HOME
+
 @app.route('/')
 def home():
     nickname = session.get('nickname')
     if not nickname:
         return redirect('/login')
-    return render_template("home.html", nickname=nickname)
+
+    if nickname == "ADMIN":
+    # 1. Totale utenti
+      utenti_res = supabase.table("giocatori").select("nickname").execute()
+      totale_utenti = len(utenti_res.data)
+
+    # 2. Media punti
+      punti_res = supabase.table("giocatori").select("punti").execute()
+      punti_list = [r["punti"] for r in punti_res.data if "punti" in r]
+      media_punti = round(sum(punti_list) / len(punti_list), 2) if punti_list else 0
+
+    # 3. Premiati recenti
+      sette_giorni_fa = (datetime.now() - timedelta(days=7)).isoformat()
+      recenti = supabase.table("giocatori")\
+                      .select("nickname", "ultimo_accesso")\
+                      .gte("ultimo_accesso", sette_giorni_fa)\
+                      .execute()
+      premiati_recenti = [r["nickname"] for r in recenti.data if "nickname" in r]
+
+      return render_template("home.html",
+        nickname=nickname,
+        totale_utenti=totale_utenti,
+        media_punti=media_punti,
+        premiati_recenti=premiati_recenti
+      )
+
+    else:
+        giocatore = carica_utente(nickname)
+        obiettivi = load_goals(session.get('lang', 'it'))
+        punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in giocatore["obiettivi"])
+        punteggio_premio = 120
+        punti_mancanti = max(0, punteggio_premio - punti)
+        percentuale = round(punti * 100 / punteggio_premio)
+
+        return render_template("home.html",
+            nickname=nickname,
+            punti=punti,
+            punti_mancanti=punti_mancanti,
+            percentuale=percentuale,
+            punteggio_premio=punteggio_premio
+        )
 
 # 7️⃣ CAMBIO LINGUA
 @app.route('/lang/<locale>', methods=['POST'])
