@@ -72,7 +72,7 @@ def inject_lang_and_ui():
 #
 from flask import request
 
-@app.route('/lang/<locale>', methods=['POST'])
+
 @app.route('/lang/<locale>', methods=['POST'])
 def set_language(locale):
     if locale in SUPPORTED_LANGS:
