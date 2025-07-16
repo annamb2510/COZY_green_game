@@ -27,3 +27,7 @@ app.jinja_env.globals['T'] = lambda text: \
 @app.context_processor
 def inject_lang():
     return {'lang': session.get('lang', 'it')}
+
+@app.route("/_debug/routes")
+def debug_routes():
+    return "<br>".join(str(r) for r in app.url_map.iter_rules())
