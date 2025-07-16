@@ -3,6 +3,7 @@ import sys
 import json
 from datetime import datetime, timedelta
 
+
 from flask import (
     Flask, render_template, request, session,
     redirect, flash, url_for
@@ -15,7 +16,6 @@ load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
 app = Flask(__name__)
 app.debug = False
 app.secret_key = 'vacanza-secret-key'
@@ -41,6 +41,7 @@ for file in translations_dir.glob('strings_*.json'):
         app.logger.error(f"Errore caricando {file.name}: {e}")
         UI_TRANSLATIONS[lang] = {}
 
+app.jinja_env.globals['UI_TRANSLATIONS'] = UI_TRANSLATIONS
 #
 # 1) CARICAMENTO TRADUZIONI UI (strings_xx.json)
 #
