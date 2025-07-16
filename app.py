@@ -8,6 +8,8 @@ from flask import (
 )
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
+
 
 # Carica variabili ambiente da .env
 load_dotenv()
