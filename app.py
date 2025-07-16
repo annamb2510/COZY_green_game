@@ -2,26 +2,25 @@ import os
 import sys
 import json
 from pathlib import Path
+from datetime import datetime, timedelta
 from flask import (
     Flask, session, render_template,
     request, redirect, url_for, flash
 )
-from supabase import create_client, Client
 from dotenv import load_dotenv
-from datetime import datetime, timedelta
+from supabase import create_client, Client
 
-
-# Carica variabili ambiente da .env
+# 🔧 Init Supabase
 load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-
+# 🧠 Init Flask
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'vacanza-secret-key')
 
-# 1️⃣ Traduzioni UI
+# 🌍 Carica traduzioni UI
 SUPPORTED_LANGS = ['it', 'en', 'fr']
 UI_TRANSLATIONS = {}
 translations_dir = Path(__file__).parent / 'translations'
@@ -29,18 +28,18 @@ translations_dir = Path(__file__).parent / 'translations'
 print("DEBUG: ✅ Flask app inizializzata correttamente", file=sys.stderr)
 
 for file in translations_dir.glob('strings_*.json'):
-    lang = file.stem.split('_')[1]  # es. 'strings_fr' → 'fr'
+    lang = file.stem.split('_')[1]
     try:
         UI_TRANSLATIONS[lang] = json.loads(file.read_text(encoding='utf-8'))
     except Exception as e:
         app.logger.error(f"Errore caricando {file.name}: {e}")
         UI_TRANSLATIONS[lang] = {}
 
-# 2️⃣ Helper globale per fallback rapido
+# 🔣 Helper traduzioni
 app.jinja_env.globals['T'] = lambda text: \
     UI_TRANSLATIONS.get(session.get('lang', 'it'), {}).get(text, text)
 
-# 3️⃣ Inietta la lingua nei template
+# 💬 Inietta lingua e traduzioni nei template
 @app.context_processor
 def inject_lang():
     return {
@@ -48,48 +47,30 @@ def inject_lang():
         'UI_TRANSLATIONS': UI_TRANSLATIONS
     }
 
-# 4️⃣ Rotta di debug per verificare routing
+# 🛠 Rotta debug per tutte le route
 @app.route("/_debug/routes")
 def debug_routes():
     return "<br>".join(str(r) for r in app.url_map.iter_rules())
 
-# 5️⃣ LOGIN
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        nickname = request.form.get('nickname', '').strip().upper()
-        if not nickname:
-            flash(T("Please enter a valid nickname"))
-            return redirect('/login')
-        session['nickname'] = nickname
-        flash("Welcome!")
-        return redirect('/')
-    return render_template("login.html")
-from datetime import datetime
+# 📁 Carica obiettivi localizzati
+def load_goals(lang):
+    fn = Path(__file__).parent / 'data' / f'obiettivi_{lang}.json'
+    if fn.exists():
+        return json.loads(fn.read_text(encoding='utf-8'))
+    return []
 
-# 1. Carica utente da Supabase
+# 🧑‍💻 Carica utente da Supabase
 def carica_utente(nickname):
-    result = supabase.table("giocatori")\
-                     .select("*")\
-                     .eq("nickname", nickname)\
-                     .execute()
+    result = supabase.table("giocatori").select("*").eq("nickname", nickname).execute()
     if result.data:
         return result.data[0]
-    return {
-        "nickname": nickname,
-        "punti": 0,
-        "obiettivi": [],
-        "ultimo_accesso": datetime.now().isoformat()
-    }
+    return {"nickname": nickname, "punti": 0, "obiettivi": [], "ultimo_accesso": datetime.now().isoformat()}
 
-# 2. Salva utente su Supabase
+# 💾 Salva utente su Supabase
 def salva_utente(nickname, punti, obiettivi):
     ultimo_accesso = datetime.now().isoformat()
-    esiste = supabase.table("giocatori")\
-                     .select("nickname")\
-                     .eq("nickname", nickname)\
-                     .execute()
-    if esiste.data:
+    exists = supabase.table("giocatori").select("nickname").eq("nickname", nickname).execute()
+    if exists.data:
         supabase.table("giocatori").update({
             "punti": punti,
             "obiettivi": obiettivi,
@@ -103,15 +84,20 @@ def salva_utente(nickname, punti, obiettivi):
             "ultimo_accesso": ultimo_accesso
         }).execute()
 
-# 3. Carica obiettivi per lingua
-def load_goals(lang):
-    fn = Path(__file__).parent / 'data' / f'obiettivi_{lang}.json'
-    if fn.exists():
-        return json.loads(fn.read_text(encoding='utf-8'))
-    return []
+# 🔐 Login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        nickname = request.form.get('nickname', '').strip().upper()
+        if not nickname:
+            flash(T("Please enter a valid nickname"))
+            return redirect('/login')
+        session['nickname'] = nickname
+        flash("Welcome!")
+        return redirect('/')
+    return render_template("login.html")
 
-# 6️⃣ HOME
-
+# 🏠 Home e dashboard
 @app.route('/')
 def home():
     nickname = session.get('nickname')
@@ -119,30 +105,24 @@ def home():
         return redirect('/login')
 
     if nickname == "ADMIN":
-    # 1. Totale utenti
-      utenti_res = supabase.table("giocatori").select("nickname").execute()
-      totale_utenti = len(utenti_res.data)
+        utenti_res = supabase.table("giocatori").select("nickname").execute()
+        totale_utenti = len(utenti_res.data)
 
-    # 2. Media punti
-      punti_res = supabase.table("giocatori").select("punti").execute()
-      punti_list = [r["punti"] for r in punti_res.data if "punti" in r]
-      media_punti = round(sum(punti_list) / len(punti_list), 2) if punti_list else 0
+        punti_res = supabase.table("giocatori").select("punti").execute()
+        punti_list = [r["punti"] for r in punti_res.data if "punti" in r]
+        media_punti = round(sum(punti_list) / len(punti_list), 2) if punti_list else 0
 
-    # 3. Premiati recenti
-      sette_giorni_fa = (datetime.now() - timedelta(days=7)).isoformat()
-      recenti = supabase.table("giocatori")\
-                      .select("nickname", "ultimo_accesso")\
-                      .gte("ultimo_accesso", sette_giorni_fa)\
-                      .execute()
-      premiati_recenti = [r["nickname"] for r in recenti.data if "nickname" in r]
+        sette_giorni_fa = (datetime.now() - timedelta(days=7)).isoformat()
+        recenti = supabase.table("giocatori").select("nickname", "ultimo_accesso")\
+                          .gte("ultimo_accesso", sette_giorni_fa).execute()
+        premiati_recenti = [r["nickname"] for r in recenti.data if "nickname" in r]
 
-      return render_template("home.html",
-        nickname=nickname,
-        totale_utenti=totale_utenti,
-        media_punti=media_punti,
-        premiati_recenti=premiati_recenti
-      )
-
+        return render_template("home.html",
+            nickname=nickname,
+            totale_utenti=totale_utenti,
+            media_punti=media_punti,
+            premiati_recenti=premiati_recenti
+        )
     else:
         giocatore = carica_utente(nickname)
         obiettivi = load_goals(session.get('lang', 'it'))
@@ -159,7 +139,7 @@ def home():
             punteggio_premio=punteggio_premio
         )
 
-# 7️⃣ CAMBIO LINGUA
+# 🌐 Cambio lingua
 @app.route('/lang/<locale>', methods=['POST'])
 def set_language(locale):
     if locale in SUPPORTED_LANGS:
@@ -187,18 +167,43 @@ def set_language(locale):
     </html>
     """
 
-# 8️⃣ LOGOUT
+# 🔓 Logout
 @app.route('/logout')
 def logout():
     session.pop('nickname', None)
     return redirect('/login')
 
-# 9️⃣ Rotta Robiettivi (evita errore 500 su url_for)
-@app.route('/Robiettivi')
+# 🎯 Obiettivi
+@app.route('/Robiettivi', methods=['GET', 'POST'])
 def Robiettivi():
-    return render_template("obiettivi.html")
+    nickname = session.get('nickname')
+    if not nickname:
+        return redirect('/login')
+    giocatore = carica_utente(nickname)
+    obiettivi = load_goals(session.get('lang', 'it'))
 
-# 🔟 Avvio locale
+    raggiunti = set(giocatore.get("obiettivi", []))
+    if request.method == 'POST':
+        oid = request.form.get("obiettivo")
+        if oid and oid not in raggiunti:
+            raggiunti.add(oid)
+            punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in raggiunti)
+            salva_utente(nickname, punti, list(raggiunti))
+            flash(T("Goal marked as completed"))
+
+    punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in raggiunti)
+    punteggio_premio = 120
+    mancano = max(0, punteggio_premio - punti)
+
+    return render_template("obiettivi.html",
+        obiettivi=obiettivi,
+        punti=punti,
+        punteggio_premio=punteggio_premio,
+        mancano=mancano,
+        raggiunti=raggiunti
+    )
+
+# 🚀 Avvio app locale
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
