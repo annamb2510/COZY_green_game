@@ -1,9 +1,11 @@
 {% extends "base.html" %}
-{% from "macros.html" import _ %}
+
+{% from "macros.html" import translate with context %}
 
 {% block content %}
 <div class="panel">
-  <h1 class="mb-4">🏠 {{ translate("Dashboard") }}</h1>
+   <pre>lang = {{ lang }}</pre>
+   <pre>Welcome → {{ T("Welcome") }}</pre>  <h1 class="mb-4">🏠 {{ translate("Dashboard") }}</h1>
 
   <p>
     {{ translate("Welcome") }}, <strong>{{ nickname }}</strong>!
