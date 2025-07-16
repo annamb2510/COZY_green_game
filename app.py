@@ -23,6 +23,23 @@ app.secret_key = 'vacanza-secret-key'
 # costanti e default
 PUNTEGGIO_PREMIANTE = 120
 SUPPORTED_LANGS = ['it', 'en', 'fr']
+import json, os
+from pathlib import Path
+
+UI_TRANSLATIONS = {}
+
+# Path assoluto alla cartella “translations”
+translations_dir = Path(__file__).parent / 'translations'
+
+# Carica tutti i file strings_*.json
+for file in translations_dir.glob('strings_*.json'):
+    # se chiamato strings_fr.json → file.stem = 'strings_fr'
+    lang = file.stem.split('_')[1]  
+    try:
+        UI_TRANSLATIONS[lang] = json.loads(file.read_text(encoding='utf-8'))
+    except Exception as e:
+        app.logger.error(f"Errore caricando {file.name}: {e}")
+        UI_TRANSLATIONS[lang] = {}
 
 #
 # 1) CARICAMENTO TRADUZIONI UI (strings_xx.json)
@@ -40,9 +57,15 @@ def load_ui_translations():
             out[lang] = {}
     return out
 
-UI_TRANSLATIONS = load_ui_translations()
+# per ora sotto commmento UI_TRANSLATIONS = load_ui_translations()
 import sys
 print("🔤 UI_TRANSLATIONS:", UI_TRANSLATIONS, file=sys.stderr)
+
+# dopo il caricamento dei JSON...
+print("⏳ CWD:", os.getcwd(), "– translations dir:", os.listdir("translations"), file=sys.stderr)
+for lang, d in UI_TRANSLATIONS.items():
+    print(f"⏳ UI_TRANSLATIONS[{lang}] → {len(d)} keys", file=sys.stderr)
+
 
 @app.template_filter('t')
 def translate_ui(text):
@@ -70,7 +93,16 @@ def inject_lang_and_ui():
 #
 # 2) ROUTE PER IL CAMBIO LINGUA
 #
-from flask import request
+
+from flask import jsonify
+
+@app.route('/_debug/translations')
+def debug_translations():
+    return jsonify({
+        "files_on_disk": [f.name for f in (Path(__file__).parent/'translations').iterdir()],
+        "loaded_languages": {lang: list(d.keys()) for lang, d in UI_TRANSLATIONS.items()}
+    })
+
 
 
 @app.route('/lang/<locale>', methods=['POST'])
