@@ -1,26 +1,28 @@
 {% extends "base.html" %}
+{% from "macros.html" import _ %}
+
 {% block content %}
 <div class="panel">
-  <h1 class="mb-4">🏠 {{ "Dashboard"|t }}</h1>
+  <h1 class="mb-4">🏠 {{ translate("Dashboard") }}</h1>
 
   <p>
-    {{ "Welcome"|t }}, <strong>{{ nickname }}</strong>!
+    {{ translate("Welcome") }}, <strong>{{ nickname }}</strong>!
   </p>
 
   {% if nickname == "ADMIN" %}
     <h2>{{ "Overall stats"|t }}</h2>
     <p>
-      {{ "Total users:"|t }} {{ totale_utenti }}<br>
-      {{ "Average score:"|t }} {{ media_punti }}
+      {{ translate("Total users:") }} {{ totale_utenti }}<br>
+      {{ trnslate("Average score:") }} {{ media_punti }}
     </p>
-    <h3>{{ "Recently rewarded (last 7 days)"|t }}</h3>
+    <h3>{{ translate("Recently rewarded (last 7 days)") }}</h3>
     <ul>
       {% for n in premiati_recenti %}
         <li>{{ n }}</li>
       {% endfor %}
     </ul>
   {% else %}
-    <h2>{{ "Your progress"|t }}</h2>
+    <h2>{{ translate("Your progress") }}</h2>
     <p>
       {{ "Points collected:"|t }} <strong>{{ punti }}</strong><br>
       {{ "Points to prize:"|t }} <strong>{{ punti_mancanti }}</strong><br>

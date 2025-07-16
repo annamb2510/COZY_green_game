@@ -1,32 +1,29 @@
 {% extends "base.html" %}
-{% from "_macros.html" import _ %}
+{% from "macros.html" import translate %}
+
 {% block content %}
-  
   <div class="panel mx-auto" style="max-width: 400px;">
-  <h1 class="mb-4 text-center">
-    {{ _("Start your holiday by playing with us") }}
-  </h1>
+    <h1 class="mb-4 text-center">
+      {{ translate("Start your holiday by playing with us") }}
+    </h1>
 
-  <form method="post" class="mt-3">
-    <div class="mb-3">
-      <label for="nickname" class="form-label">
-        {{ _("Nickname") }}
-      </label>
-      <input
-        type="text"
-        class="form-control"
-        id="nickname"
-        name="nickname"
-        placeholder="{{ _("Enter your nickname") }}"
-        required
-      >
-    </div>
-
-    <button type="submit" class="btn btn-primary w-100">
-    
-      {{ _("Enter") }}
-    </button>
-  </form>
-</div>
+    <form method="post" class="mt-3">
+      <div class="mb-3">
+        <label for="nickname" class="form-label">
+          {{ translate("Nickname") }}
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="nickname"
+          name="nickname"
+          placeholder="{{ translate("Enter your nickname") }}"
+          required
+        >
+      </div>
+      <button type="submit" class="btn btn-primary w-100">
+        {{ translate("Enter") }}
+      </button>
+    </form>
+  </div>
 {% endblock %}
-
