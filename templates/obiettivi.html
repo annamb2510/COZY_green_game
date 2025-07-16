@@ -1,20 +1,20 @@
 {% extends "base.html" %}
-{% from "macros.html" import _ %}
+{% from "macros.html" import translate with context %}
 
 {% block content %}
 <div class="panel">
-  <h1 class="mb-4">🎯 {{ "My Eco Goals"|t }}</h1>
+  <h1 class="mb-4">🎯 {{ translate("My Eco Goals") }}</h1>
 
   <p>
-    <strong>{{ "Total score:"|t }}</strong> {{ punti }} / {{ punteggio_premio }}<br>
-    <strong>{{ "Points to go:"|t }}</strong> {{ mancano }}
+    <strong>{{ translate("Total score:") }}</strong> {{ punti }} / {{ punteggio_premio }}<br>
+    <strong>{{ translate("Points to go:") }}</strong> {{ mancano }}
   </p>
 
   <a
     href="{{ url_for('home') }}"
     class="btn btn-sm btn-outline-secondary d-block w-auto mx-auto mb-4"
   >
-    ← {{ "Back"|t }}
+    ← {{ translate("Back") }}
   </a>
 
   <ul style="list-style: none; padding: 0; margin: 0;">
@@ -40,7 +40,7 @@
               <button
                 type="submit"
                 class="btn btn-sm btn-warning me-3 animate__animated animate__pulse"
-                title="{{ 'Mark goal as done'|t }}"
+                title="{{ translate("Mark goal as done") }}"
                 style="padding: 0.25rem 0.6rem;"
               >
                 {{ ob.emoji }}
