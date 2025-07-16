@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-  <pre>lang = {{ lang }}</pre>
-  <pre>UI_TRANSLATIONS[lang] keys = {{ UI_TRANSLATIONS[lang].keys()|list }}</pre>
-  <pre>t-filter → {{ "Start your holiday by playing with us"|t }}</pre>
-
+  
   <div class="panel mx-auto" style="max-width: 400px;">
   <h1 class="mb-4 text-center">
    {{ UI_TRANSLATIONS[lang].get("Start your holiday by playing with us") }}
