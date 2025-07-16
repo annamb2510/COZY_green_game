@@ -1,4 +1,7 @@
 {% macro translate(text) -%}
-  {{ UI_TRANSLATIONS[lang].get(text, text) }}
+  {% if UI_TRANSLATIONS is defined and lang is defined %}
+    {{ UI_TRANSLATIONS[lang].get(text, text) }}
+  {% else %}
+    {{ text }}
+  {% endif %}
 {%- endmacro %}
-

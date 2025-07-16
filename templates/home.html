@@ -10,10 +10,10 @@
   </p>
 
   {% if nickname == "ADMIN" %}
-    <h2>{{ "Overall stats"|t }}</h2>
+    <h2>{{ translate("Overall stats") }}</h2>
     <p>
       {{ translate("Total users:") }} {{ totale_utenti }}<br>
-      {{ trnslate("Average score:") }} {{ media_punti }}
+      {{ translate("Average score:") }} {{ media_punti }}
     </p>
     <h3>{{ translate("Recently rewarded (last 7 days)") }}</h3>
     <ul>
@@ -24,18 +24,18 @@
   {% else %}
     <h2>{{ translate("Your progress") }}</h2>
     <p>
-      {{ "Points collected:"|t }} <strong>{{ punti }}</strong><br>
-      {{ "Points to prize:"|t }} <strong>{{ punti_mancanti }}</strong><br>
-      {{ "Completion:"|t }} <strong>{{ percentuale }}%</strong>
+      {{ translate("Points collected:") }} <strong>{{ punti }}</strong><br>
+      {{ translate("Points to prize:")}} <strong>{{ punti_mancanti }}</strong><br>
+      {{ translate("Completion:") }} <strong>{{ percentuale }}%</strong>
     </p>
     <a href="{{ url_for('Robiettivi') }}" class="btn btn-primary">
-      {{ "View Goals"|t }}
+      {{ translate("View Goals") }}
     </a>
   {% endif %}
 
   <div class="mt-4">
     <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">
-      {{ "Logout"|t }}
+      {{ translate("Logout") }}
     </a>
   </div>
 </div>
