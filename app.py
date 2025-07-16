@@ -11,6 +11,8 @@ SUPPORTED_LANGS = ['it', 'en', 'fr']
 UI_TRANSLATIONS = {}
 translations_dir = Path(__file__).parent / 'translations'
 
+print("DEBUG: ✅ Flask app inizializzata correttamente", file=sys.stderr)
+
 for file in translations_dir.glob('strings_*.json'):
     lang = file.stem.split('_')[1]  # 'strings_fr' → 'fr'
     try:
@@ -31,3 +33,8 @@ def inject_lang():
 @app.route("/_debug/routes")
 def debug_routes():
     return "<br>".join(str(r) for r in app.url_map.iter_rules())
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
