@@ -25,8 +25,6 @@ SUPPORTED_LANGS = ['it', 'en', 'fr']
 UI_TRANSLATIONS = {}
 translations_dir = Path(__file__).parent / 'translations'
 
-print("DEBUG: ✅ Flask app inizializzata correttamente", file=sys.stderr)
-
 for file in translations_dir.glob('strings_*.json'):
     lang = file.stem.split('_')[1]
     try:
@@ -35,11 +33,9 @@ for file in translations_dir.glob('strings_*.json'):
         app.logger.error(f"Errore caricando {file.name}: {e}")
         UI_TRANSLATIONS[lang] = {}
 
-# 🔣 Global T() helper
 app.jinja_env.globals['T'] = lambda text: \
     UI_TRANSLATIONS.get(session.get('lang', 'it'), {}).get(text, text)
 
-# 📥 Inject lang + translations in templates
 @app.context_processor
 def inject_lang():
     return {
@@ -47,19 +43,16 @@ def inject_lang():
         'UI_TRANSLATIONS': UI_TRANSLATIONS
     }
 
-# 🛠 Debug route to inspect active endpoints
 @app.route("/_debug/routes")
 def debug_routes():
     return "<br>".join(str(r) for r in app.url_map.iter_rules())
 
-# 🟢 Load goals from local JSON
 def load_goals(lang):
     fn = Path(__file__).parent / 'data' / f'obiettivi_{lang}.json'
     if fn.exists():
         return json.loads(fn.read_text(encoding='utf-8'))
     return []
 
-# 🧍‍♂️ User loader from Supabase
 def carica_utente(nickname):
     result = supabase.table("giocatori").select("*").eq("nickname", nickname).execute()
     if result.data:
@@ -71,7 +64,6 @@ def carica_utente(nickname):
         "ultimo_accesso": datetime.now().isoformat()
     }
 
-# 💾 Save user progress to Supabase
 def salva_utente(nickname, punti, obiettivi):
     ultimo_accesso = datetime.now().isoformat()
     exists = supabase.table("giocatori").select("nickname").eq("nickname", nickname).execute()
@@ -89,7 +81,6 @@ def salva_utente(nickname, punti, obiettivi):
             "ultimo_accesso": ultimo_accesso
         }).execute()
 
-# 🔐 LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -102,14 +93,15 @@ def login():
         return redirect('/')
     return render_template("login.html")
 
-# 🏠 HOME
 @app.route('/')
 def home():
     nickname = session.get('nickname')
     if not nickname:
-        return redirect('/login')
+        return redirect('/')
 
     if nickname == "ADMIN":
+        salva_utente(nickname, 0, [])
+
         utenti_res = supabase.table("giocatori").select("nickname").execute()
         totale_utenti = len(utenti_res.data)
 
@@ -148,41 +140,25 @@ def home():
             punteggio_premio=punteggio_premio
         )
 
-# 🌐 LANG SWITCH
 @app.route('/lang/<locale>', methods=['POST'])
 def set_language(locale):
     if locale in SUPPORTED_LANGS:
         session['lang'] = locale
         session.modified = True
     next_page = request.form.get('next') or url_for('login')
-    return f"""
-    <!DOCTYPE html>
-    <html lang="{locale}">
-    <head>
-      <meta charset="utf-8" />
-      <title>Switching language…</title>
-      <script>
-        setTimeout(function() {{
-          window.location.href = '{next_page}';
-        }}, 100);
-      </script>
-    </head>
-    <body>
-      <p style="text-align: center; padding-top: 2rem;">
-        🌍 Switching to language: <strong>{locale.upper()}</strong><br>
-        Just a moment…
-      </p>
-    </body>
-    </html>
-    """
+    return f"""<!DOCTYPE html>
+<html lang="{locale}">
+<head><meta charset="utf-8"><title>Switching language…</title>
+<script>setTimeout(function() {{
+window.location.href = '{next_page}';}}, 100);</script></head>
+<body><p style="text-align:center; padding-top:2rem;">
+🌍 Switching to language: <strong>{locale.upper()}</strong><br>Just a moment…</p></body>
+</html>"""
 
-# 🔓 LOGOUT
 @app.route('/logout')
 def logout():
     session.pop('nickname', None)
     return redirect('/login')
-
-# 🎯 OBIETTIVI
 @app.route('/Robiettivi', methods=['GET', 'POST'])
 def Robiettivi():
     nickname = session.get('nickname')
@@ -214,7 +190,38 @@ def Robiettivi():
         raggiunti=raggiunti
     )
 
-# 🚀 App launcher (for local dev)
+@app.route('/gestione')
+def gestione_utenti():
+    if session.get('nickname') != 'ADMIN':
+        return redirect('/')
+
+    utenti_res = supabase.table("giocatori").select("*").execute()
+    elenco = []
+
+    obiettivi = load_goals(session.get('lang', 'it'))
+    punteggio_premio = 120
+
+    for g in utenti_res.data:
+        raggiunti = set(g.get("obiettivi", []))
+        punti = g.get("punti", 0)
+        mancano = max(0, punteggio_premio - punti)
+        elenco.append({
+            "nickname": g["nickname"],
+            "punti": punti,
+            "mancano": mancano,
+            "obiettivi": len(raggiunti)
+        })
+
+    return render_template("gestione.html", elenco=elenco)
+
+@app.route('/gestione/delete/<nickname>', methods=['POST'])
+def delete_user(nickname):
+    if session.get('nickname') != 'ADMIN':
+        return redirect('/')
+    supabase.table("giocatori").delete().eq("nickname", nickname).execute()
+    flash(f"Utente {nickname} eliminato con successo.")
+    return redirect(url_for('gestione_utenti'))
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
