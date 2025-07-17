@@ -11,6 +11,7 @@
           <th>Punti</th>
           <th>Punti mancanti</th>
           <th>Obiettivi completati</th>
+          <th>Ultimo accesso</th>
           <th>Azioni</th>
         </tr>
       </thead>
@@ -21,13 +22,17 @@
             <td>{{ g.punti }}</td>
             <td>{{ g.mancano }}</td>
             <td>{{ g.obiettivi }}</td>
+            <td>{{ g.ultimo_accesso[:19].replace("T", " ") }}</td>
             <td>
               {% if g.nickname != "ADMIN" %}
                <form method="post" action="{{ url_for('delete_user', nickname=g.nickname) }}" style="display:inline;">
-                  <button type="submit" class="btn btn-sm btn-danger"
-                          onclick="return confirm('Sei sicuro di voler eliminare {{ g.nickname }}?');">
-                    🗑️ Elimina
-                  </button>
+                   <button type="submit"
+                    class="btn btn-sm btn-outline-danger"
+                    title="Elimina"
+                    style="padding: 4px 6px;">
+                    🗑️
+                   </button>
+
                 </form>
               {% else %}
                 <span class="text-muted">Protetto</span>

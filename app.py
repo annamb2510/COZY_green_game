@@ -215,8 +215,9 @@ def gestione_utenti():
             "nickname": g["nickname"],
             "punti": punti,
             "mancano": mancano,
-            "obiettivi": len(raggiunti)
-        })
+            "obiettivi": len(raggiunti),
+            "ultimo_accesso": g.get("ultimo_accesso", "")  # ⬅️ Aggiunto
+            })
 
     return render_template("gestione.html", elenco=elenco)
 
