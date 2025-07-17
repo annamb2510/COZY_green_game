@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% from "macros.html" import translate with context %}
+
+{% block content %}
+<div class="panel">
+  <h1 class="mb-4">🎯 {{ translate("My Eco Goals") }}</h1>
+
+  <p>
+    <strong>{{ translate("Total score:") }}</strong> {{ punti }} / {{ punteggio_premio }}<br>
+    <strong>{{ translate("Points to go:") }}</strong> {{ mancano }}
+  </p>
+
+  <a
+    href="{{ url_for('home') }}"
+    class="btn btn-sm btn-outline-secondary d-block w-auto mx-auto mb-4"
+  >
+    ← {{ translate("Back") }}
+  </a>
+
+  <ul style="list-style: none; padding: 0; margin: 0;">
+    {% for ob in obiettivi %}
+      {% set oid = ob.id|string %}
+      <li
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.6em 0;
+          border-bottom: 1px solid #ddd;
+        "
+      >
+        <div style="display: flex; align-items: center;">
+          {% if oid not in raggiunti %}
+            <form
+              method="post"
+              action="{{ url_for('Robiettivi') }}"
+              style="margin: 0; padding: 0;"
+            >
+              <input type="hidden" name="obiettivo" value="{{ oid }}">
+              <button
+                type="submit"
+                class="btn btn-sm btn-warning me-3 animate__animated animate__pulse"
+                title="{{ translate("Mark goal as done") }}"
+                style="padding: 0.25rem 0.6rem;"
+              >
+                {{ ob.emoji }}
+              </button>
+            </form>
+          {% else %}
+            <span class="me-3" style="font-size: 1.2em;">
+              {{ ob.emoji }}
+            </span>
+          {% endif %}
+          <span>{{ ob.testo }}</span>
+        </div>
+
+        <span
+          class="badge 
+            {% if oid not in raggiunti %}bg-warning text-dark{% else %}bg-success text-white{% endif %}
+          "
+        >
+          +{{ ob.punti }}
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
