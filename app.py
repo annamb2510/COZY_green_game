@@ -110,19 +110,18 @@ def home():
         media_punti = round(sum(punti_list) / len(punti_list), 2) if punti_list else 0
 
         
-    sette_giorni_fa = (datetime.now() - timedelta(days=7)).isoformat()
-    recenti = supabase.table("giocatori")\
+        sette_giorni_fa = (datetime.now() - timedelta(days=7)).isoformat()
+        recenti = supabase.table("giocatori")\
                   .select("nickname", "ultimo_accesso", "punti")\
                   .gte("ultimo_accesso", sette_giorni_fa)\
                   .execute()
 
-    punteggio_premio = 120
-    premiati_recenti = [
-       r["nickname"]
-       for r in recenti.data
-        if "punti" in r and r["punti"] >= punteggio_premio
-        ]
-
+        punteggio_premio = 120
+        premiati_recenti = [
+                     r["nickname"]
+                     for r in recenti.data
+                         if "punti" in r and r["punti"] >= punteggio_premio
+                            ]
         return render_template("home.html",
             nickname=nickname,
             totale_utenti=totale_utenti,
