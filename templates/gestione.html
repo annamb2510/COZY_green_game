@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-4">
-  <h2 class="mb-4">👤 Gestione Utenti</h2>
+<table class="table table-bordered table-striped" style="font-size: 0.85rem; font-weight: normal; font-family: 'Open Sans', sans-serif;">
+ <h2 class="mb-4">👤 Gestione Utenti</h2>
 
   {% if elenco %}
     <table class="table table-bordered table-striped">
@@ -29,7 +30,7 @@
                    <button type="submit"
                     class="btn btn-sm btn-outline-danger"
                     title="Elimina"
-                    style="padding: 4px 6px;">
+                    style="padding: 4px 4px;">
                     🗑️
                    </button>
 

@@ -15,7 +15,7 @@ load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
+PUNTEGGIO_PREMIANTE=120
 # ⚙️ Flask setup
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'vacanza-secret-key')
@@ -116,7 +116,7 @@ def home():
                   .gte("ultimo_accesso", sette_giorni_fa)\
                   .execute()
 
-        punteggio_premio = 120
+        punteggio_premio = PUNTEGGIO_PREMIANTE
         premiati_recenti = [
                      r["nickname"]
                      for r in recenti.data
@@ -134,7 +134,7 @@ def home():
         obiettivi = load_goals(session.get('lang', 'it'))
         raggiunti = set(giocatore.get("obiettivi", []))
         punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in raggiunti)
-        punteggio_premio = 120
+        punteggio_premio = PUNTEGGIO_PREMIANTE
         punti_mancanti = max(0, punteggio_premio - punti)
         percentuale = round(punti * 100 / punteggio_premio)
 
@@ -185,7 +185,7 @@ def Robiettivi():
             flash(T("Goal marked as completed"))
 
     punti = sum(o["punti"] for o in obiettivi if str(o["id"]) in raggiunti)
-    punteggio_premio = 120
+    punteggio_premio = PUNTEGGIO_PREMIANTE
     mancano = max(0, punteggio_premio - punti)
 
     return render_template("obiettivi.html",
@@ -205,7 +205,7 @@ def gestione_utenti():
     elenco = []
 
     obiettivi = load_goals(session.get('lang', 'it'))
-    punteggio_premio = 120
+    punteggio_premio = PUNTEGGIO_PREMIANTE
 
     for g in utenti_res.data:
         raggiunti = set(g.get("obiettivi", []))

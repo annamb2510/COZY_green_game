@@ -22,5 +22,7 @@
   "Points to go:": "Punti mancanti:",
   "Back": "Indietro",
   "Mark goal as done": "Segna obiettivo come completato",
-  "Please enter a valid nickname": "Per favore inserisci un identificativo valido"
+  "Please enter a valid nickname": "Per favore inserisci un identificativo valido",
+  "User management":"Gestione accessi"
+
 }
