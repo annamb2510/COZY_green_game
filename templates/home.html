@@ -30,9 +30,10 @@
     <h2>{{ translate("Your progress") }}</h2>
     <p>
       {{ translate("Points collected:") }} <strong>{{ punti }}</strong><br>
-      {% if punti_mancanti <> 0}
-          {{ translate("Points to prize:")}} <strong>{{ punti_mancanti }}</strong><br>
+      {% if punti_mancanti != 0 %}
+         {{ translate("Points to prize:")}} <strong>{{ punti_mancanti }}</strong><br>
       {% endif %}
+
       {{ translate("Completion:") }} <strong>{{ percentuale }}%</strong>
     </p>
     {% if punti >= 120 %}
