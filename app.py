@@ -97,7 +97,7 @@ def login():
 def home():
     nickname = session.get('nickname')
     if not nickname:
-        return redirect('/')
+        return redirect('/login')
 
     if nickname == "ADMIN":
         salva_utente(nickname, 0, [])
