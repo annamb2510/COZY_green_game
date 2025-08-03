@@ -30,19 +30,30 @@
     <h2>{{ translate("Your progress") }}</h2>
     <p>
       {{ translate("Points collected:") }} <strong>{{ punti }}</strong><br>
-      {{ translate("Points to prize:")}} <strong>{{ punti_mancanti }}</strong><br>
+      {% if punti_mancanti <> 0}
+          {{ translate("Points to prize:")}} <strong>{{ punti_mancanti }}</strong><br>
+      {% endif %}
       {{ translate("Completion:") }} <strong>{{ percentuale }}%</strong>
     </p>
-    <a href="{{ url_for('Robiettivi') }}" class="btn btn-primary">
-      {{ translate("View Goals") }}
-    </a>
     {% if punti >= 120 %}
       <div class="alert alert-success text-center mt-4" role="alert">
         <h4 class="alert-heading">🎉 Complimenti!</h4>
-        <p>Hai diritto al premio per aver raggiunto l'obiettivo di 120 punti!</p>
+#         <p>Hai diritto al premio per aver raggiunto l'obiettivo di 120 punti!</p>
         <img src="{{ url_for('static', filename='img/premio.png') }}" alt="Premio" style="width:150px;">
       </div>
-{% endif %}
+      <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+          <script>
+          confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+          });
+      </script>
+
+    {% endif %}
+    <a href="{{ url_for('Robiettivi') }}" class="btn btn-primary">
+      {{ translate("View Goals") }}
+    </a>
 
   {% endif %}
 
