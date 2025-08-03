@@ -40,16 +40,19 @@
       <div class="alert alert-success text-center mt-4" role="alert">
       <h4 class="alert-heading">🎉 {{ translate("Congratulations!") }}</h4>
           <p>{{ translate("You’ve earned a prize for reaching 120 points!") }}</p>
-          <img src="{{ url_for('static', filename='img/premio.png') }}" alt="Premio" class="bounce" style="width:150px;">
+          <img src="{{ url_for('static', filename='img/premio.png') }}" alt="Premio" class="bounce-one" style="width:150px;">
      </div>
-      <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
           <script>
           confetti({
           particleCount: 100,
           spread: 70,
           origin: { y: 0.6 }
           });
-      </script>
+         <audio id="successSound" src="{{ url_for('static', filename='sounds/success.mp3') }}" preload="auto"></audio>
+         document.getElementById('successSound').play();
+     </script>
+
 
     {% endif %}
     <a href="{{ url_for('Robiettivi') }}" class="btn btn-primary">
