@@ -48,27 +48,7 @@
       </span>
     </li>
   {% endfor %}
-  </ul>
+</ul>
+
 </div>
-{% endblock %}
-
-{% block scripts %}
-  {{ super() }}
-  {% if punti >= punteggio_premio %}
-  <script>
-    toastr.options = {
-      "closeButton": true,
-      "progressBar": true,
-      "positionClass": "toast-top-center",
-      "timeOut": "8000"
-    };
-
-    toastr.success(`
-      <div style="text-align:center;">
-        <img src="{{ url_for('static', filename='img/balena_mondo.png') }}" alt="Premio balena" style="max-width: 200px; margin-bottom: 10px;">
-        <br><strong>{{ translate("You've reached the prize score!") }}</strong>
-      </div>
-    `);
-  </script>
-  {% endif %}
 {% endblock %}
