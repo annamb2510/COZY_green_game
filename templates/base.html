@@ -87,18 +87,31 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <!-- Flash messages as toast -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const flashMessages = {{ get_flashed_messages() | tojson }};
-      toastr.options = {
-        closeButton: true,
-        progressBar: true,
-        positionClass: "toast-top-right",
-        timeOut: 3000
-      };
-      flashMessages.forEach(msg => toastr.success(msg));
+  <!-- Flash messages as toast -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const flashMessages = {{ get_flashed_messages() | tojson }};
+    toastr.options = {
+      closeButton: true,
+      progressBar: true,
+      positionClass: "toast-top-center",
+      timeOut: 4000,
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+      newestOnTop: true
+    };
+
+    flashMessages.forEach(msg => {
+      toastr.success(`
+        <div style="text-align:center;">
+          <i class="fa-solid fa-seedling fa-lg text-success mb-2"></i><br>
+          <strong>${msg}</strong>
+        </div>
+      `);
     });
-  </script>
+  });
+</script>
+
 
   {% block scripts %}{% endblock %}
 </body>
