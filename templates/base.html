@@ -88,13 +88,13 @@
 
   <!-- Flash messages as toast -->
   <!-- Flash messages as toast -->
-<script>
+  <script>
   document.addEventListener("DOMContentLoaded", function () {
     const flashMessages = {{ get_flashed_messages() | tojson }};
     toastr.options = {
       closeButton: true,
       progressBar: true,
-      positionClass: "toast-top-center",
+      positionClass: "toast-center-center",  // 👈 centrato
       timeOut: 4000,
       showMethod: "fadeIn",
       hideMethod: "fadeOut",
